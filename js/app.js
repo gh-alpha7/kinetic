@@ -1,4 +1,4 @@
-/* Tiny hash router: #/ is home, #/map is the concept map, #/<chapter>/<lab> is a lab. */
+/* Tiny hash router: #/ is home, #/map is the concept map, #/playground the sandbox, #/<chapter>/<lab> is a lab. */
 (function () {
   "use strict";
   var app = document.getElementById("app"), destroy = null;
@@ -10,10 +10,13 @@
     app.innerHTML = "";
     var labs = K.chapter(parts[0]) ? K.chapterLabs(parts[0]) : [];
     document.querySelectorAll(".chapters a[data-chapter]").forEach(function (a) {
-      if (a.dataset.chapter === parts[0] && (labs.length || parts[0] === "map")) a.setAttribute("aria-current", "page");
+      if (a.dataset.chapter === parts[0] && (labs.length || parts[0] === "map" || parts[0] === "playground")) a.setAttribute("aria-current", "page");
       else a.removeAttribute("aria-current");
     });
-    if (parts[0] === "map") {
+    if (parts[0] === "playground") {
+      destroy = Playground.mount(app, parts[1]);
+      document.title = "Playground · Kinetic";
+    } else if (parts[0] === "map") {
       destroy = Maps.mount(app);
       document.title = "Concept map · Kinetic";
     } else if (labs.length) {

@@ -20,7 +20,7 @@ var Home = (function () {
             '<p class="mono muted">IIT JEE · Physics · Mechanics</p>' +
             "<h1>Physics you can <em>poke</em>.</h1>" +
             '<p class="lede">Every chapter is a little lab built on a real physics engine. Change a number, throw a ball, flip your frame of reference, and watch the JEE formulas come true in front of you.</p>' +
-            '<div class="cta"><a class="btn btn-primary" href="#/kinematics/line">Start with kinematics →</a><a class="btn" href="#/map">See the concept map</a><a class="btn" href="#how">How it works</a></div>' +
+            '<div class="cta"><a class="btn btn-primary" href="#/kinematics/line">Start with kinematics →</a><a class="btn" href="#/playground">Open the playground</a><a class="btn" href="#/map">See the concept map</a><a class="btn" href="#how">How it works</a></div>' +
           "</div>" +
           '<div class="play"><canvas aria-label="Physics sandbox: drag and throw the objects"></canvas>' +
             '<p class="play-hint">grab anything and throw it</p><p class="play-readout"></p></div>' +

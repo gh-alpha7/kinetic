@@ -31,6 +31,20 @@ Every lab has:
 - **How it connects:** the lab's slice of the concept map, with neighbouring ideas from other labs faded in.
 - **Practice:** three JEE-style questions (easy, medium, hard). Hints unlock one at a time, and *Set it up in the lab* loads the question's numbers so the student predicts the answer first and then checks it in the simulation.
 
+## Playground
+
+`#/playground` is a sandbox where students build their own systems from parts: blocks, balls, surfaces they draw (floors, walls, table tops, ramps), fixed and movable pulleys, strings over any number of wheels, springs, fixed points and turntables. It has three views: **side** (gravity down), **table top** (looking down, so friction acts on everything; this is where turntables live) and **space** (no floor, bodies attract with a scaled-up G). Select any body to see its live free-body diagram and readouts (tension, normal force, static or kinetic friction, spring force, the centripetal force a turntable needs). Graphs show its speed and the system's kinetic, potential and total energy. There are ready-made setups (table + hanging mass, two-pulley Atwood, movable pulley, ramp + pulley, loop the loop, spring, turntable, sun + planets, three-body figure eight, collisions) and challenges that ask for a prediction before revealing the physics. Builds autosave in the browser, Undo goes back, and *Copy link* encodes the whole build in the URL.
+
+matter.js only finds contacts and their normal impulses. Everything else is solved in `playground.js` after each engine step, at 4 substeps per frame: inextensible strings (tangent segments and arcs around the wheels, solved jointly so light movable pulleys behave), exact Coulomb friction (static up to μs N, then μk N), springs, mutual gravity and turntables. Checked against the formulas:
+
+- table + hanging mass a = 2.156 m/s², T = 15.29 N, N = 29.40 N; it holds with 1.4 kg (static friction 13.72 N = m₂g)
+- two-pulley Atwood a = 2.450 m/s², T = 36.75 N; ramp + pulley a = 1.601 m/s²
+- movable pulley: 2 kg balances 4 kg; with 2.5 kg the accelerations are 0.6925 and 1.385 m/s² (theory 0.6925, twice that)
+- block on a 30° slope (μs 0.5, μk 0.3) a = 2.354 m/s²; at 27° (just past the 26.6° repose) 1.830; at 25° it holds
+- loop the loop at 12.2 m/s: top speed 5.596 m/s (theory 5.589), tension within 0.14 N of mv²/r + mg cos θ; at 11 m/s the string goes slack at 136° (theory 135°)
+- turntable blocks leave at ω = 1.983, 1.400, 1.183 rad/s (theory √(μs g/r) = 1.980, 1.400, 1.183)
+- spring period 1.99 s (theory 1.987); elastic collision 1 kg at 6 m/s into 3 kg gives −3.00 and 3.00 m/s; projectile range 40.76 m (theory 40.82)
+
 ## Concept map
 
 `#/map` draws every idea in the course as one cause → effect graph: weight splits on a slope, the normal force caps friction, friction goes into the free-body diagram, net force sets acceleration, acceleration changes velocity, and so on. Each arrow carries a verb ('sets max of', 'changes', 'if zero'). Tapping a concept lights up the whole chain that causes it (orange) and the chain it leads to (green), says in one line why it matters, and links to the lab that teaches it. Remembering the chain makes the separate facts quicker to recall.
@@ -69,8 +83,9 @@ Plain static site, no build step.
 | `js/core.js` | SI-unit simulation wrapper, fixed-step clock with slow motion, zoom/pan camera, drawing helpers, graphs, sliders, self-checking experiments, practice questions, lab page scaffold |
 | `js/labs/*.js` | One file per lab: `line`, `projectile`, `relative` (kinematics); `forces`, `incline`, `pulleys` (laws of motion) |
 | `js/maps.js` | Concept map: nodes, cause → effect edges, layered layout, per-lab and whole-course views |
+| `js/playground.js` | Playground: parts, editor, string/friction/spring/gravity/turntable solver, presets, challenges |
 | `js/home.js` | Landing page with a throw-things-around sandbox |
-| `js/app.js` | Hash router (`#/`, `#/map`, `#/<chapter>/<lab>`) |
+| `js/app.js` | Hash router (`#/`, `#/map`, `#/playground`, `#/<chapter>/<lab>`) |
 
 To add a lab, create `js/labs/<name>.js` that calls `K.registerLab({ id, chapter, title, short, lede, tries, mount })`
 and include it in `index.html`. Chapters are listed in `CHAPTERS` in `core.js`; navigation, the home page cards and
@@ -83,4 +98,4 @@ don't mix a new page with cached old files.
 ## Running locally
 
 Serve the folder with any static server, for example `npx serve .`, and open `http://localhost:3000`.
-On `localhost` the simulations are exposed as `window.__sims` for testing.
+On `localhost` the simulations are exposed as `window.__sims`, and the playground as `window.__pg`, for testing.

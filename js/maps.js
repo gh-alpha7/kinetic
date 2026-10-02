@@ -62,6 +62,16 @@ var Maps = (function () {
     var lab = K.labs.filter(function (l) { return l.id === NODES[id].lab; })[0];
     return lab ? lab.chapter : "";
   }
+  // a concept takes the colour of the chapter that teaches it
+  function colorOf(id) { var ch = K.chapter(chapterOf(id)); return ch && ch.color ? ch.color : "ink"; }
+
+  // Chapters add their own concepts: Maps.add({ nodes: { id: {label, lab, why} }, edges: [[from, to, verb]], labs: { labId: [ids] } }).
+  // Edges may point to concepts from other chapters, which is how the course links up.
+  function add(def) {
+    Object.keys(def.nodes || {}).forEach(function (id) { NODES[id] = def.nodes[id]; });
+    (def.edges || []).forEach(function (e) { EDGES.push(e); });
+    Object.keys(def.labs || {}).forEach(function (id) { LAB_NODES[id] = def.labs[id]; });
+  }
 
   /* ---------- layered layout: causes on the left, effects on the right ---------- */
   function layout(ids) {
@@ -142,7 +152,7 @@ var Maps = (function () {
     });
     ids.forEach(function (id) {
       var p = pos[id], n = NODES[id], ch = chapterOf(id);
-      svg += '<g class="cm-node ch-' + ch + (ghost[id] ? " ghost" : "") + (opts.labId && n.lab === opts.labId ? " here" : "") + '" data-id="' + id + '" tabindex="0" role="button" aria-label="' + esc(n.label) + '">' +
+      svg += '<g class="cm-node ch-' + ch + (ghost[id] ? " ghost" : "") + (opts.labId && n.lab === opts.labId ? " here" : "") + '" data-id="' + id + '" style="--c:var(--' + colorOf(id) + ')" tabindex="0" role="button" aria-label="' + esc(n.label) + '">' +
         '<rect x="' + p.x + '" y="' + p.y + '" width="' + p.w + '" height="34" rx="17"/>' +
         '<text x="' + (p.x + p.w / 2) + '" y="' + (p.y + 21.5) + '" text-anchor="middle">' + esc(n.label) + "</text></g>";
     });
@@ -231,5 +241,5 @@ var Maps = (function () {
     return function () {};
   }
 
-  return { NODES: NODES, EDGES: EDGES, forLab: forLab, mount: mount };
+  return { NODES: NODES, EDGES: EDGES, LAB_NODES: LAB_NODES, add: add, forLab: forLab, mount: mount, colorOf: colorOf };
 })();

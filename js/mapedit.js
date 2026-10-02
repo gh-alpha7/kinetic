@@ -12,8 +12,8 @@ var MapEditor = (function () {
   function width(label) { return Math.max(90, Math.min(260, String(label).length * 7.4 + 28)); }
   function short(label) { label = String(label || "Untitled"); return label.length > 34 ? label.slice(0, 33) + "…" : label; }
   function colorFor(labId) {
-    var l = K.labs.filter(function (x) { return x.id === labId; })[0];
-    return !l ? "ink" : l.chapter === "kinematics" ? "disp" : l.chapter === "laws" ? "app" : "ink";
+    var l = K.labs.filter(function (x) { return x.id === labId; })[0], ch = l && K.chapter(l.chapter);
+    return ch && ch.color ? ch.color : "ink";
   }
   function encode(s) { return btoa(unescape(encodeURIComponent(s))).replace(/\+/g, "-").replace(/\//g, "_").replace(/=+$/, ""); }
   function decode(s) { s = s.replace(/-/g, "+").replace(/_/g, "/"); while (s.length % 4) s += "="; return decodeURIComponent(escape(atob(s))); }

@@ -563,26 +563,26 @@ var K = (function () {
     { id: "modern", title: "Modern physics", blurb: "Photons, atoms, nuclei and semiconductors." }
   ];
   var CHAPTERS = [
-    { id: "kinematics", unit: "mechanics", title: "Kinematics", blurb: "Describing motion: where, how fast, and how that changes." },
-    { id: "laws", unit: "mechanics", title: "Laws of motion", blurb: "Forces and why things move: free-body diagrams, friction, inclines and pulleys." },
-    { id: "work", unit: "mechanics", title: "Work, energy & power", blurb: "Where energy goes, and what it can do.", planned: ["Work by a variable force", "Work–energy theorem", "Springs and potential energy", "Power", "Collisions"] },
-    { id: "rotation", unit: "mechanics", title: "Rotational motion", blurb: "Spinning things and why they're harder to stop.", planned: ["Torque", "Moment of inertia", "Rolling without slipping", "Angular momentum"] },
-    { id: "gravitation", unit: "mechanics", title: "Gravitation", blurb: "Falling apples and orbiting moons are the same thing.", planned: ["Orbits", "Escape velocity", "Kepler's laws", "g with height and depth"] },
-    { id: "matter", unit: "mechanics", title: "Properties of matter", blurb: "How solids stretch and fluids push.", planned: ["Elasticity", "Pressure and buoyancy", "Viscosity and terminal velocity", "Surface tension"] },
-    { id: "shm", unit: "waves", title: "Simple harmonic motion", blurb: "Any restoring force proportional to displacement.", planned: ["Spring–mass systems", "Pendulums", "Energy in SHM", "Damping and resonance"] },
-    { id: "sound", unit: "waves", title: "Waves & sound", blurb: "Energy travelling without matter travelling.", planned: ["Travelling waves", "Standing waves on strings", "Organ pipes", "Beats", "Doppler effect"] },
-    { id: "heat", unit: "thermal", title: "Thermal properties", blurb: "Expansion, calorimetry and heat transfer.", planned: ["Thermal expansion", "Calorimetry", "Conduction", "Radiation"] },
-    { id: "thermo", unit: "thermal", title: "Thermodynamics", blurb: "Energy accounting for gases and engines.", planned: ["First law", "Isothermal and adiabatic", "Heat engines"] },
-    { id: "ktg", unit: "thermal", title: "Kinetic theory", blurb: "Pressure and temperature from molecules bouncing around.", planned: ["Molecules in a box", "Pressure from collisions", "Speed distribution"] },
-    { id: "electrostatics", unit: "em", title: "Electrostatics", blurb: "Charges at rest and the fields they make.", planned: ["Coulomb's law", "Field lines", "Gauss's law", "Potential", "Capacitors"] },
-    { id: "current", unit: "em", title: "Current electricity", blurb: "Charges on the move through circuits.", planned: ["Ohm's law", "Kirchhoff's laws", "Wheatstone bridge", "RC circuits"] },
-    { id: "magnetism", unit: "em", title: "Magnetism", blurb: "Moving charges push on each other sideways.", planned: ["Force on a moving charge", "Biot–Savart law", "Ampère's law", "Cyclotron"] },
-    { id: "emi", unit: "em", title: "EMI & AC", blurb: "Changing fields make currents.", planned: ["Faraday's law", "Lenz's law", "Inductance", "LCR circuits"] },
-    { id: "rays", unit: "optics", title: "Ray optics", blurb: "Mirrors, lenses and bending light.", planned: ["Reflection", "Refraction and total internal reflection", "Lenses", "Prisms", "Optical instruments"] },
-    { id: "waveoptics", unit: "optics", title: "Wave optics", blurb: "When light behaves like a wave.", planned: ["Young's double slit", "Diffraction", "Polarisation"] },
-    { id: "dual", unit: "modern", title: "Dual nature", blurb: "Light as particles, electrons as waves.", planned: ["Photoelectric effect", "de Broglie waves"] },
-    { id: "atoms", unit: "modern", title: "Atoms & nuclei", blurb: "Inside the atom.", planned: ["Bohr model", "Spectra", "Radioactive decay", "Binding energy"] },
-    { id: "semi", unit: "modern", title: "Semiconductors", blurb: "The physics inside every chip.", planned: ["p–n junction", "Diodes", "Logic gates"] }
+    { id: "kinematics", unit: "mechanics", color: "disp", title: "Kinematics", blurb: "Describing motion: where, how fast, and how that changes." },
+    { id: "laws", unit: "mechanics", color: "app", title: "Laws of motion", blurb: "Forces and why things move: free-body diagrams, friction, inclines and pulleys." },
+    { id: "work", unit: "mechanics", color: "acc", title: "Work, energy & power", blurb: "Where energy goes, and what it can do.", planned: ["Work by a variable force", "Work–energy theorem", "Springs and potential energy", "Power", "Collisions"] },
+    { id: "rotation", unit: "mechanics", color: "grav", title: "Rotational motion", blurb: "Spinning things and why they're harder to stop.", planned: ["Torque", "Moment of inertia", "Rolling without slipping", "Angular momentum"] },
+    { id: "gravitation", unit: "mechanics", color: "normal", title: "Gravitation", blurb: "Falling apples and orbiting moons are the same thing.", planned: ["Orbits", "Escape velocity", "Kepler's laws", "g with height and depth"] },
+    { id: "matter", unit: "mechanics", color: "ten", title: "Properties of matter", blurb: "How solids stretch and fluids push.", planned: ["Elasticity", "Pressure and buoyancy", "Viscosity and terminal velocity", "Surface tension"] },
+    { id: "shm", unit: "waves", color: "vel", title: "Simple harmonic motion", blurb: "Any restoring force proportional to displacement.", planned: ["Spring–mass systems", "Pendulums", "Energy in SHM", "Damping and resonance"] },
+    { id: "sound", unit: "waves", color: "disp", title: "Waves & sound", blurb: "Energy travelling without matter travelling.", planned: ["Travelling waves", "Standing waves on strings", "Organ pipes", "Beats", "Doppler effect"] },
+    { id: "heat", unit: "thermal", color: "fric", title: "Thermal properties", blurb: "Expansion, calorimetry and heat transfer.", planned: ["Thermal expansion", "Calorimetry", "Conduction", "Radiation"] },
+    { id: "thermo", unit: "thermal", color: "acc", title: "Thermodynamics", blurb: "Energy accounting for gases and engines.", planned: ["First law", "Isothermal and adiabatic", "Heat engines"] },
+    { id: "ktg", unit: "thermal", color: "ten", title: "Kinetic theory", blurb: "Pressure and temperature from molecules bouncing around.", planned: ["Molecules in a box", "Pressure from collisions", "Speed distribution"] },
+    { id: "electrostatics", unit: "em", color: "normal", title: "Electrostatics", blurb: "Charges at rest and the fields they make.", planned: ["Coulomb's law", "Field lines", "Gauss's law", "Potential", "Capacitors"] },
+    { id: "current", unit: "em", color: "ten", title: "Current electricity", blurb: "Charges on the move through circuits.", planned: ["Ohm's law", "Kirchhoff's laws", "Wheatstone bridge", "RC circuits"] },
+    { id: "magnetism", unit: "em", color: "app", title: "Magnetism", blurb: "Moving charges push on each other sideways.", planned: ["Force on a moving charge", "Biot–Savart law", "Ampère's law", "Cyclotron"] },
+    { id: "emi", unit: "em", color: "grav", title: "EMI & AC", blurb: "Changing fields make currents.", planned: ["Faraday's law", "Lenz's law", "Inductance", "LCR circuits"] },
+    { id: "rays", unit: "optics", color: "ten", title: "Ray optics", blurb: "Mirrors, lenses and bending light.", planned: ["Reflection", "Refraction and total internal reflection", "Lenses", "Prisms", "Optical instruments"] },
+    { id: "waveoptics", unit: "optics", color: "disp", title: "Wave optics", blurb: "When light behaves like a wave.", planned: ["Young's double slit", "Diffraction", "Polarisation"] },
+    { id: "dual", unit: "modern", color: "grav", title: "Dual nature", blurb: "Light as particles, electrons as waves.", planned: ["Photoelectric effect", "de Broglie waves"] },
+    { id: "atoms", unit: "modern", color: "app", title: "Atoms & nuclei", blurb: "Inside the atom.", planned: ["Bohr model", "Spectra", "Radioactive decay", "Binding energy"] },
+    { id: "semi", unit: "modern", color: "vel", title: "Semiconductors", blurb: "The physics inside every chip.", planned: ["p–n junction", "Diodes", "Logic gates"] }
   ];
   function unitOf(ch) { return UNITS.filter(function (u) { return u.id === ch.unit; })[0]; }
   function registerLab(lab) { labs.push(lab); }

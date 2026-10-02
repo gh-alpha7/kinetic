@@ -514,3 +514,4 @@ button, input, select { font: inherit; color: inherit; }
   .me-canvas { height: 62vh; }
   .me-toolbar .spacer { display: none; }
 }
+.foot-like { display: flex; justify-content: center; flex-wrap: wrap; gap: 8px; margin-bottom: 12px; }

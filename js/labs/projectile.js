@@ -399,11 +399,29 @@
       "Up-and-down it's a ball thrown straight up: $v_y$ starts at $u\\sin\\theta$, drops by $g$ every second, is zero at the top, and the <i>y-shadow</i> bunches up there.</p>" +
       "<p>Combine them and the path is a parabola: $y = x\\tan\\theta - \\dfrac{g x^2}{2u^2\\cos^2\\theta}$.</p>" +
       '<div class="trap"><b>JEE trap: velocity at the top isn\'t zero.</b> Only $v_y$ is. The ball still moves sideways at $u\\cos\\theta$, so its speed there is $u\\cos\\theta$ and its acceleration is still $g$ downward.</div>');
-    K.quiz(P.quiz, {
-      q: "Two balls are thrown with the same speed at 30° and 60° to the horizontal. What is the ratio of their maximum heights, $H_{30} : H_{60}$?",
-      options: ["1 : 1", "1 : 3", "1 : √3", "3 : 1"], answer: 1,
-      explain: "$H = u^2\\sin^2\\theta / 2g$, so the ratio is $\\sin^2 30° : \\sin^2 60° = \\tfrac14 : \\tfrac34 = 1 : 3$. Their ranges are equal though, because $30° + 60° = 90°$. Fire both and see."
-    });
+    function apply(s) {
+      uS.set(s.u); thS.set(s.th); hS.set(s.h || 0);
+      g = s.g || 9.8; sim.setG(g);
+      P.controls.querySelectorAll(".seg button").forEach(function (b) { b.setAttribute("aria-pressed", String(+b.dataset.value === g)); });
+      targetX = 95;                                   // keep the crates out of the way of the question's shot
+      buildTower(); buildCrates(false); P.resetBtn.click();
+    }
+    K.practice(P.quiz, [
+      { level: "easy", tag: "maximum height", setup: { u: 20, th: 30, h: 0 }, watch: "Fire at 30°, then set 60° and fire again. Compare H",
+        q: "Two balls are thrown with the same speed at 30° and 60° to the horizontal. What is the ratio of their maximum heights, $H_{30} : H_{60}$?",
+        options: ["1 : 1", "1 : 3", "1 : √3", "3 : 1"], answer: 1,
+        explain: "$H = u^2\\sin^2\\theta / 2g$, so the ratio is $\\sin^2 30° : \\sin^2 60° = \\tfrac14 : \\tfrac34 = 1 : 3$. Their ranges are equal though, because $30° + 60° = 90°$." },
+      { level: "medium", tag: "launch from a height", setup: { u: 20, th: 30, h: 20 }, watch: "Predict the range, then press Fire",
+        q: "A ball is thrown at 20 m/s, 30° above the horizontal, from the top of a 20 m tower ($g = 9.8$). How far from the base does it land?",
+        options: ["35.3 m", "45.1 m", "56.9 m", "69.3 m"], answer: 2,
+        hints: ["The landing time solves $0 = h + u\\sin\\theta\\,t - \\tfrac12 g t^2$. Take the positive root.", "Then the range is $u\\cos\\theta \\times T$: horizontal motion never changes."],
+        explain: "$4.9t^2 - 10t - 20 = 0$ gives $T = \\dfrac{10 + \\sqrt{100 + 392}}{9.8} = 3.28$ s. Then $R = 20\\cos 30° \\times 3.28 = 17.32 \\times 3.28 = 56.9$ m, much more than the 35.3 m from ground level." },
+      { level: "hard", tag: "two angles, one target", setup: { u: 25, th: 26, h: 0 }, watch: "Fire at 26°, then try 64°. Where do both land?",
+        q: "A ball launched at 25 m/s from the ground must land 50 m away on level ground ($g = 9.8$). At what angle(s) can it be thrown?",
+        options: ["25.8° and 64.2°", "38.3° and 51.7°", "45° only", "No angle works"], answer: 0,
+        hints: ["Start from $R = u^2 \\sin 2\\theta / g$ and solve for $\\sin 2\\theta$.", "$\\sin x = k$ has two answers between 0° and 180°: $x$ and $180° - x$."],
+        explain: "$\\sin 2\\theta = Rg/u^2 = 50 \\times 9.8 / 625 = 0.784$, so $2\\theta = 51.6°$ or $128.4°$, i.e. $\\theta = 25.8°$ or $64.2°$. They add to 90°, as complementary angles must. With whole degrees, 26° and 64° both land at 50.3 m; the 64° shot just stays in the air about twice as long." }
+    ], apply, P);
 
     var tries = K.Tries(P.tries, lab.id, lab.tries, function () { K.refreshProgress(document); count(); });
     function count() { P.triesCount.textContent = tries.count() + " of " + tries.total + " done"; }

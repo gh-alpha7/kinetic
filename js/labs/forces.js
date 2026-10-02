@@ -234,11 +234,23 @@
       "<p><b class=\"c-fric\">Friction</b> has two personalities. While the block is stuck, <b>static</b> friction is exactly as big as it needs to be to stop it moving, up to a limit of $\\mu_s N$. Once it slides, <b>kinetic</b> friction is a steady $\\mu_k N$, a bit less. That's why things lurch when they break free.</p>" +
       "<p>Friction depends on the <b class=\"c-normal\">normal force</b>, not the weight. Pull upward at an angle and $N = mg - F\\sin\\phi$ drops, and friction drops with it.</p>" +
       '<div class="trap"><b>JEE trap: static friction is not always $\\mu_s N$.</b> $\\mu_s N$ is only the <i>maximum</i>. If you push with less than that, friction equals your push and nothing moves. Always check whether the body slides before writing $f = \\mu N$.</div>');
-    K.quiz(P.quiz, {
-      q: "A 5 kg block rests on a floor with $\\mu_s = 0.5$ and $\\mu_k = 0.4$ ($g = 9.8$). A horizontal force of 20 N is applied. What is the friction force?",
-      options: ["20 N", "24.5 N", "19.6 N", "0 N"], answer: 0,
-      explain: "Maximum static friction is $\\mu_s mg = 0.5 \\times 5 \\times 9.8 = 24.5$ N. The 20 N push is less than that, so the block doesn't move and static friction is just 20 N, enough to balance it. Set $m = 5$, $F = 20$ and check."
-    });
+    function apply(s) { ramp = false; mS.set(s.m); fS.set(s.F); phiS.set(s.phi); msS.set(s.mus); mkS.set(s.muk); reset(); }
+    K.practice(P.quiz, [
+      { level: "easy", tag: "static friction", setup: { m: 5, F: 20, phi: 0, mus: 0.5, muk: 0.4 }, watch: "Predict the friction force, then press Push",
+        q: "A 5 kg block rests on a floor with $\\mu_s = 0.5$ and $\\mu_k = 0.4$ ($g = 9.8$). A horizontal force of 20 N is applied. What is the friction force?",
+        options: ["20 N", "24.5 N", "19.6 N", "0 N"], answer: 0,
+        explain: "Maximum static friction is $\\mu_s mg = 0.5 \\times 5 \\times 9.8 = 24.5$ N. The 20 N push is less than that, so the block doesn't move, and static friction is just 20 N: enough to balance the push, no more." },
+      { level: "medium", tag: "does it slide?", setup: { m: 4, F: 30, phi: 0, mus: 0.5, muk: 0.4 }, watch: "Predict the acceleration, then press Push",
+        q: "A 4 kg block ($\\mu_s = 0.5$, $\\mu_k = 0.4$, $g = 9.8$) is pushed horizontally with 30 N. What is its acceleration?",
+        options: ["3.58 m/s²", "7.50 m/s²", "2.65 m/s²", "0 m/s²"], answer: 0,
+        hints: ["First check: is 30 N more than the maximum static friction $\\mu_s mg$?", "Once it slides, friction is $\\mu_k mg$, whatever the push."],
+        explain: "Maximum static friction is $0.5 \\times 4 \\times 9.8 = 19.6$ N, less than 30 N, so it slides. Kinetic friction is $0.4 \\times 39.2 = 15.68$ N, so $a = (30 - 15.68)/4 = 3.58$ m/s². 2.65 m/s² is the trap: it uses $\\mu_s$ for a sliding block." },
+      { level: "hard", tag: "the best angle to pull", setup: { m: 10, F: 0, phi: 27, mus: 0.5, muk: 0.4 }, watch: "Press Ramp F up from 0, read the breakaway force, then try other angles to beat it",
+        q: "A 10 kg crate sits on a floor with $\\mu_s = 0.5$ ($g = 9.8$). You pull it with a rope at angle $\\phi$ above the horizontal. Which angle needs the least force to start it moving, and what is that force?",
+        options: ["0°, 49.0 N", "26.6°, 43.8 N", "45°, 46.2 N", "63.4°, 54.8 N"], answer: 1,
+        hints: ["At breakaway, $F\\cos\\phi = \\mu_s(mg - F\\sin\\phi)$, so $F = \\dfrac{\\mu_s mg}{\\cos\\phi + \\mu_s\\sin\\phi}$.", "$F$ is smallest when $\\cos\\phi + \\mu_s\\sin\\phi$ is largest. Differentiate: that happens at $\\tan\\phi = \\mu_s$."],
+        explain: "$\\tan\\phi = 0.5$ gives $\\phi = 26.6°$, and $F_{min} = \\dfrac{\\mu_s mg}{\\sqrt{1 + \\mu_s^2}} = \\dfrac{49}{1.118} = 43.8$ N. Pulling up lightens the crate (smaller $N$, so less friction), but tilt too far and too little of the pull is horizontal. At 0° it takes 49 N, at 45° 46.2 N." }
+    ], apply, P);
 
     var tries = K.Tries(P.tries, lab.id, lab.tries, function () { K.refreshProgress(document); count(); });
     function count() { P.triesCount.textContent = tries.count() + " of " + tries.total + " done"; }

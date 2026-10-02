@@ -497,6 +497,59 @@ var K = (function () {
     });
   }
 
+  /* ---------- practice: easy, medium, hard ---------- */
+  // Each question: { level, tag, q, options, answer, explain, hints: [...], setup: {...}, watch: "what to look for" }
+  // apply(setup) loads the question's numbers into the lab so students can predict, then test.
+  function practice(el, questions, apply, parts) {
+    var LEVELS = { easy: "Easy", medium: "Medium", hard: "Hard" };
+    el.innerHTML = '<div class="qset"></div>';
+    var box = el.querySelector(".qset");
+    questions.forEach(function (q, qi) {
+      var card = h('<article class="qcard lvl-' + q.level + '">' +
+        '<header class="q-head"><span class="lvl">' + LEVELS[q.level] + '</span><span class="q-tag">' + md(q.tag || "") + "</span></header>" +
+        '<p class="quiz-q">' + md(q.q) + '</p><div class="quiz-opts"></div>' +
+        '<div class="q-tools"></div><ol class="q-hints"></ol><div class="quiz-explain"></div></article>');
+      var opts = card.querySelector(".quiz-opts"), ex = card.querySelector(".quiz-explain");
+      var tools = card.querySelector(".q-tools"), hintList = card.querySelector(".q-hints"), shown = 0;
+      q.options.forEach(function (text, i) {
+        var b = h('<button type="button">' + String.fromCharCode(65 + i) + ". " + md(text) + "</button>");
+        b.addEventListener("click", function () {
+          opts.querySelectorAll("button").forEach(function (x, j) {
+            x.classList.toggle("right", j === q.answer);
+            x.classList.toggle("wrong", x === b && j !== q.answer);
+          });
+          ex.innerHTML = (i === q.answer ? "<b>Correct.</b> " : "<b>Not quite.</b> ") + md(q.explain);
+          ex.classList.add("show");
+        });
+        opts.appendChild(b);
+      });
+      if (q.hints && q.hints.length) {
+        var hb = h('<button class="btn btn-sm" type="button">Hint 1 of ' + q.hints.length + "</button>");
+        hb.addEventListener("click", function () {
+          if (shown >= q.hints.length) return;
+          hintList.appendChild(h("<li>" + md(q.hints[shown]) + "</li>"));
+          shown++;
+          if (shown >= q.hints.length) { hb.disabled = true; hb.textContent = "No more hints"; }
+          else hb.textContent = "Hint " + (shown + 1) + " of " + q.hints.length;
+        });
+        tools.appendChild(hb);
+      }
+      if (q.setup && apply) {
+        var sb = h('<button class="btn btn-sm btn-primary" type="button">Set it up in the lab ↑</button>');
+        sb.addEventListener("click", function () {
+          apply(q.setup);
+          if (parts) {
+            parts.root.querySelector(".stage").scrollIntoView({ behavior: "smooth", block: "center" });
+            flash(parts.note, q.watch || "Predict the answer, then press play", 5000);
+          }
+        });
+        tools.appendChild(sb);
+      }
+      void qi;
+      box.appendChild(card);
+    });
+  }
+
   /* ---------- lab page scaffold ---------- */
   var labs = [];
   // chapters in the order they appear; labs register into them
@@ -546,7 +599,8 @@ var K = (function () {
             '<div class="panel"><h2>Readouts</h2><div class="readouts"></div></div>' +
             '<div class="panel"><h2>Try this <small class="tries-count"></small></h2><ul class="tries"></ul></div>' +
             '<div class="panel concept"><h2>The idea</h2><div class="concept-body"></div></div>' +
-            '<div class="panel wide"><h2>JEE check <small>one question</small></h2><div class="quiz"></div></div>' +
+            '<div class="panel wide"><h2>How it connects <small>cause → effect · tap a concept</small></h2><div class="cmap-slot"></div></div>' +
+            '<div class="panel wide"><h2>Practice <small>easy → hard · predict, then test it in the lab</small></h2><div class="quiz"></div></div>' +
           "</div>" +
           '<nav class="pager">' +
             (prev ? '<a class="prev" href="' + href(prev) + '"><span>← previous</span><b>' + prev.title + "</b></a>" : "<span></span>") +
@@ -559,9 +613,10 @@ var K = (function () {
     var parts = {
       root: el, canvas: q(".stage canvas"), hud: q(".hud"), note: q(".stage-note"), controls: q(".controls"),
       graphs: q(".graphs"), eqs: q(".eqs"), readouts: q(".readouts"), tries: q(".tries"),
-      concept: q(".concept-body"), quiz: q(".quiz"), playBtn: q('[data-act="play"]'), resetBtn: q('[data-act="reset"]'),
+      concept: q(".concept-body"), quiz: q(".quiz"), cmap: q(".cmap-slot"), playBtn: q('[data-act="play"]'), resetBtn: q('[data-act="reset"]'),
       time: q(".time"), speedSlot: q(".speed"), triesCount: q(".tries-count")
     };
+    if (window.Maps) Maps.forLab(parts.cmap, lab.id);
     refreshProgress(el);
     return parts;
   }
@@ -621,7 +676,7 @@ var K = (function () {
   return {
     STEP: STEP, DT: DT, DEG: DEG, theme: theme, h: h, fmt: fmt, alpha: alpha, clamp: clamp, md: md, tex: tex,
     slider: slider, seg: seg, check: check, Sim: Sim, Graph: Graph, arrow: arrow, label: label,
-    Tries: Tries, quiz: quiz, labs: labs, registerLab: registerLab, scaffold: scaffold, refreshProgress: refreshProgress,
+    Tries: Tries, quiz: quiz, practice: practice, labs: labs, registerLab: registerLab, scaffold: scaffold, refreshProgress: refreshProgress,
     CHAPTERS: CHAPTERS, chapterLabs: chapterLabs, chapter: chapter,
     transport: transport, readout: readout, flash: flash, throttle: throttle
   };

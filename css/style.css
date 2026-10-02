@@ -270,3 +270,60 @@ button, input, select { font: inherit; color: inherit; }
 .state-pill.kinetic { background: color-mix(in srgb, var(--fric) 14%, var(--surface)); color: var(--fric); }
 .chapters a { background: transparent; color: var(--ink); }
 .chapters a[aria-current="page"] { background: var(--ink); color: var(--bg); }
+
+/* ---------- concept map (cause → effect) ---------- */
+.cmap-scroll { overflow-x: auto; -webkit-overflow-scrolling: touch; padding-bottom: 4px; }
+.cmap { display: block; width: 100%; height: auto; margin: 0 auto; color: var(--muted); font-family: var(--sans); }
+.cm-node { cursor: pointer; outline: none; --c: var(--ink); }
+.cm-node.ch-kinematics { --c: var(--disp); }
+.cm-node.ch-laws { --c: var(--app); }
+.cm-node rect { fill: color-mix(in srgb, var(--c) 9%, var(--surface)); stroke: var(--c); stroke-width: 1.5; transition: fill .15s, opacity .15s, stroke-width .15s; }
+.cm-node text { fill: var(--ink); font-size: 13px; font-weight: 600; pointer-events: none; }
+.cm-node.here rect { stroke-width: 3; }
+.cm-node.ghost rect { stroke-dasharray: 4 3; fill: var(--surface); }
+.cm-node.ghost text { fill: var(--muted); font-weight: 500; }
+.cm-node:hover rect, .cm-node:focus-visible rect { stroke-width: 3; }
+.cm-edge path { fill: none; stroke: var(--muted); stroke-width: 1.4; opacity: .55; transition: opacity .15s, stroke .15s; }
+.cm-edge text { fill: var(--muted); font-size: 10.5px; font-style: italic; opacity: .9; }
+.cm-edge.ghost path { stroke-dasharray: 4 4; opacity: .35; }
+.cmap.focused .cm-node:not(.sel):not(.cause):not(.effect) { opacity: .28; }
+.cmap.focused .cm-edge:not(.cause):not(.effect) { opacity: .12; }
+.cmap .cm-node.sel rect { fill: var(--c); }
+.cmap .cm-node.sel text { fill: var(--surface); }
+.cmap .cm-node.cause rect { stroke: var(--acc); stroke-width: 2.5; }
+.cmap .cm-node.effect rect { stroke: var(--vel); stroke-width: 2.5; }
+.cmap .cm-edge.cause path { stroke: var(--acc); opacity: 1; stroke-width: 2.2; }
+.cmap .cm-edge.effect path { stroke: var(--vel); opacity: 1; stroke-width: 2.2; }
+.cmap .cm-edge.cause text, .cmap .cm-edge.effect text { fill: var(--ink); font-weight: 600; }
+.cmap-detail { margin-top: 12px; padding: 12px 14px; border-radius: 12px; background: var(--surface-2); font-size: 14px; }
+.cmap-detail h3 { margin: 0 0 6px; font: 700 16px var(--serif); }
+.cmap-detail p { margin: 6px 0 0; }
+.cmap-line span { display: inline-block; min-width: 82px; font: 600 11px var(--mono); text-transform: uppercase; letter-spacing: .06em; }
+.cmap-line.cause span { color: var(--acc); }
+.cmap-line.effect span { color: var(--vel); }
+.cmap-legend { display: flex; flex-wrap: wrap; gap: 8px 18px; margin: 18px 0 10px; font-size: 13px; color: var(--muted); }
+.cmap-legend i { display: inline-block; width: 12px; height: 12px; border-radius: 4px; margin-right: 6px; vertical-align: -1px; border: 2px solid; }
+.cmap-legend .ch-kinematics i { border-color: var(--disp); }
+.cmap-legend .ch-laws i { border-color: var(--app); }
+.cmap-legend .lg-cause i { border-color: var(--acc); background: var(--acc); }
+.cmap-legend .lg-effect i { border-color: var(--vel); background: var(--vel); }
+.cmap-panel { padding: 16px; }
+
+/* ---------- practice: easy / medium / hard ---------- */
+.qset { display: grid; gap: 14px; }
+.qcard { --lv: var(--vel); padding: 16px 16px 14px; border-radius: 14px; border: 1px solid var(--line); border-left: 4px solid var(--lv); background: var(--surface); }
+.qcard.lvl-medium { --lv: var(--ten); }
+.qcard.lvl-hard { --lv: var(--bad); }
+.q-head { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; margin-bottom: 8px; }
+.lvl { font: 700 11px var(--mono); text-transform: uppercase; letter-spacing: .08em; padding: 3px 8px; border-radius: 999px; color: var(--lv); background: color-mix(in srgb, var(--lv) 12%, transparent); }
+.q-tag { font-size: 13px; color: var(--muted); }
+.q-tools { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 12px; }
+.q-hints { margin: 10px 0 0; padding-left: 20px; font-size: 14px; color: var(--muted); }
+.q-hints:empty { display: none; }
+.q-hints li + li { margin-top: 4px; }
+.map-page .cmap-panel { display: grid; grid-template-columns: minmax(0, 1fr) 320px; gap: 18px; align-items: start; }
+.map-page .cmap-detail { position: sticky; top: 84px; margin-top: 0; }
+@media (max-width: 860px) {
+  .map-page .cmap-panel { grid-template-columns: 1fr; }
+  .map-page .cmap-detail { position: static; order: -1; }
+}

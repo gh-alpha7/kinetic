@@ -28,7 +28,12 @@ Every lab has:
 - **Readouts:** the measured value next to the formula value.
 - **Try this:** guided experiments that tick themselves off when the student achieves them.
 - **The idea:** a short explanation plus the classic JEE trap for that topic.
-- **JEE check:** one exam-style question with a worked explanation.
+- **How it connects:** the lab's slice of the concept map, with neighbouring ideas from other labs faded in.
+- **Practice:** three JEE-style questions (easy, medium, hard). Hints unlock one at a time, and *Set it up in the lab* loads the question's numbers so the student predicts the answer first and then checks it in the simulation.
+
+## Concept map
+
+`#/map` draws every idea in the course as one cause → effect graph: weight splits on a slope, the normal force caps friction, friction goes into the free-body diagram, net force sets acceleration, acceleration changes velocity, and so on. Each arrow carries a verb ('sets max of', 'changes', 'if zero'). Tapping a concept lights up the whole chain that causes it (orange) and the chain it leads to (green), says in one line why it matters, and links to the lab that teaches it. Remembering the chain makes the separate facts quicker to recall.
 
 ## Physics accuracy
 
@@ -47,9 +52,11 @@ Checked results (simulated vs formula):
 - **Cart braking from 20 m/s at −5 m/s²:** stops at **40.0000 m** at t = 4.000 s, returns to the start at t = 8.00 s (displacement 0, distance 80 m).
 - **Projectile at 20 m/s and 30°:** R = 35.35 m, H = 5.10 m, T = 2.04 s, all matching. 60° gives the same 35.35 m range, and a 20 m tower matches too.
 - **River 100 m wide, 3 m/s current, 5 m/s boat aimed to land opposite:** crosses in 25.0 s.
-- **5 kg block, μs = 0.5:** a 20 N push is held by 20 N of static friction; breakaway at 24.5 N flat (22.0 N at a 30° pull vs 21.95 N theory); sliding acceleration matches 197609Fsphi - mu_k N)/m 3 decimals.
+- **5 kg block, μs = 0.5:** a 20 N push is held by 20 N of static friction; breakaway at 24.5 N flat (22.0 N at a 30° pull vs 21.95 N theory); sliding acceleration matches (F cos φ − μk N)/m to 3 decimals.
 - **Incline 25°, μs 0.4, μk 0.3:** a = 1.48 m/s² for 2 kg and 8 kg; smooth 30° gives 4.90 m/s²; flicked up a 40° slope it decelerates at 8.551 and returns at 4.047 m/s² (theory 8.551 / 4.047).
 - **Atwood 3 kg + 5 kg:** a = 2.45 m/s², T = 36.75 N; table system a = 2.16 m/s²; the string never stretches (both blocks move 3.0546 m).
+
+Every hard practice answer was also checked in its lab: 26° and 64° at 25 m/s both land at 50.3 m; the 80 m river with a 5 m/s current and a 3 m/s boat drifts 106.7 m at 37° upstream; the 20 m tower shot lands 56.88 m away; the table system with 2 kg hanging gives T = 15.3 N; the block flicked up a 37° slope at 8 m/s comes back past its start at 5.6 m/s (theory 5.66).
 
 ## Structure
 
@@ -59,15 +66,16 @@ Plain static site, no build step.
 | --- | --- |
 | `index.html` | Shell, fonts, matter.js and KaTeX from jsDelivr |
 | `css/style.css` | Design: one colour per quantity (blue displacement, green velocity, orange acceleration, purple gravity), light and dark |
-| `js/core.js` | SI-unit simulation wrapper, fixed-step clock with slow motion, zoom/pan camera, drawing helpers, graphs, sliders, self-checking experiments, quiz, lab page scaffold |
+| `js/core.js` | SI-unit simulation wrapper, fixed-step clock with slow motion, zoom/pan camera, drawing helpers, graphs, sliders, self-checking experiments, practice questions, lab page scaffold |
 | `js/labs/*.js` | One file per lab: `line`, `projectile`, `relative` (kinematics); `forces`, `incline`, `pulleys` (laws of motion) |
+| `js/maps.js` | Concept map: nodes, cause → effect edges, layered layout, per-lab and whole-course views |
 | `js/home.js` | Landing page with a throw-things-around sandbox |
-| `js/app.js` | Hash router (`#/`, `#/kinematics/line`, `…/projectile`, `…/relative`) |
+| `js/app.js` | Hash router (`#/`, `#/map`, `#/<chapter>/<lab>`) |
 
 To add a lab, create `js/labs/<name>.js` that calls `K.registerLab({ id, chapter, title, short, lede, tries, mount })`
 and include it in `index.html`. Chapters are listed in `CHAPTERS` in `core.js`; navigation, the home page cards and
 the pager follow from that. The scaffold gives it the stage, graphs, maths, readouts, experiments,
-explanation and quiz regions.
+explanation, concept-map and practice regions. Add the lab's concepts to `LAB_NODES` in `maps.js`.
 
 When `css/` or `js/` change, bump the `?v=` numbers in `index.html` so returning visitors
 don't mix a new page with cached old files.

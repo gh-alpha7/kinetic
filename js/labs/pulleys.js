@@ -287,11 +287,30 @@
       "<p>Add the equations and $T$ cancels, leaving $a$. Put $a$ back into either one and you get $T$. That's the whole method, and it scales to any number of blocks.</p>" +
       "<p>On the table, check first whether it moves at all: if $m_2 g \\le \\mu_s m_1 g$, static friction holds and $T = m_2 g$.</p>" +
       '<div class="trap"><b>JEE trap: tension is not the hanging weight.</b> If the hanging block accelerates downward, $T < m_2 g$; that\'s the only way it can speed up. $T = m_2 g$ only when nothing accelerates.</div>');
-    K.quiz(P.quiz, {
-      q: "In an Atwood machine, masses of 3 kg and 5 kg hang over a light, frictionless pulley. Taking $g = 10$ m/s², what is the tension in the string?",
-      options: ["30 N", "37.5 N", "40 N", "50 N"], answer: 1,
-      explain: "$T = \\dfrac{2m_1m_2g}{m_1 + m_2} = \\dfrac{2 \\times 3 \\times 5 \\times 10}{8} = 37.5$ N. It lies between $m_1g = 30$ N and $m_2g = 50$ N, as it must. Here (with g = 9.8) set $m_1 = 3$, $m_2 = 5$ and you'll get 36.75 N."
-    });
+    function apply(s) {
+      mode = s.mode;
+      P.controls.querySelectorAll(".seg button").forEach(function (b) { b.setAttribute("aria-pressed", String(b.dataset.value === mode)); });
+      friction.hidden = mode !== "table";
+      m1S.set(s.m1); m2S.set(s.m2);
+      if (s.mus != null) { msS.set(s.mus); mkS.set(s.muk); }
+      reset();
+    }
+    K.practice(P.quiz, [
+      { level: "easy", tag: "balanced Atwood", setup: { mode: "atwood", m1: 4, m2: 4 }, watch: "Predict T, then press Release",
+        q: "Two 4 kg masses hang over a light, frictionless pulley ($g = 9.8$). What is the tension in the string?",
+        options: ["19.6 N", "39.2 N", "78.4 N", "0 N"], answer: 1,
+        explain: "Nothing accelerates, so each block is in balance: $T = mg = 4 \\times 9.8 = 39.2$ N. 78.4 N is the pulley's load: the string pulls down on it from both sides." },
+      { level: "medium", tag: "unequal Atwood", setup: { mode: "atwood", m1: 3, m2: 5 }, watch: "Predict a and T, then press Release",
+        q: "Masses of 3 kg and 5 kg hang over a light, frictionless pulley ($g = 9.8$). What is the tension?",
+        options: ["29.4 N", "36.75 N", "39.2 N", "49.0 N"], answer: 1,
+        hints: ["One equation per block: $T - m_1 g = m_1 a$ and $m_2 g - T = m_2 a$.", "Add them to find $a$, then put $a$ back into either one for $T$."],
+        explain: "Adding gives $a = \\dfrac{(5 - 3)(9.8)}{8} = 2.45$ m/s². Then $T = m_1(g + a) = 3 \\times 12.25 = 36.75$ N. It sits between $m_1 g = 29.4$ N and $m_2 g = 49$ N, as it must." },
+      { level: "hard", tag: "table with friction", setup: { mode: "table", m1: 3, m2: 2, mus: 0.5, muk: 0.3 }, watch: "Try m₂ = 1.5 kg first (does it hold?), then 2 kg",
+        q: "A 3 kg block on a table ($\\mu_s = 0.5$, $\\mu_k = 0.3$, $g = 9.8$) is tied over a pulley at the edge to a hanging mass. What is the largest hanging mass that won't move it, and what is the tension if you hang 2 kg instead?",
+        options: ["1.5 kg and 15.3 N", "1.5 kg and 19.6 N", "0.9 kg and 15.3 N", "3 kg and 9.8 N"], answer: 0,
+        hints: ["It stays put while $m_2 g \\le \\mu_s m_1 g$.", "Once it moves: $m_2 g - T = m_2 a$ and $T - \\mu_k m_1 g = m_1 a$. Add them, then back-substitute."],
+        explain: "Static friction can hold up to $\\mu_s m_1 g = 14.7$ N, which is a hanging mass of 1.5 kg. With 2 kg it moves: $a = \\dfrac{(2 - 0.3 \\times 3)(9.8)}{5} = 2.16$ m/s², and $T = m_2(g - a) = 2(9.8 - 2.16) = 15.3$ N, less than $m_2 g = 19.6$ N." }
+    ], apply, P);
 
     var tries = K.Tries(P.tries, lab.id, lab.tries, function () { K.refreshProgress(document); count(); });
     function count() { P.triesCount.textContent = tries.count() + " of " + tries.total + " done"; }

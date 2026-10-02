@@ -284,11 +284,23 @@
       "<p>Split it up and the problem gets easy. Only the across part, $v_b\\cos\\alpha$, decides how long the crossing takes. The downstream part, $v_r - v_b\\sin\\alpha$, decides where you land.</p>" +
       "<p>Switch to the <b>River</b> frame: the current disappears, and the boat goes exactly where it's pointed. Same motion, different observer.</p>" +
       '<div class="trap"><b>JEE trap: \"shortest time\" and \"shortest path\" are different headings.</b> Shortest time means pointing straight across ($\\alpha = 0$). Shortest path means cancelling the drift ($\\sin\\alpha = v_r/v_b$), which only works if $v_b > v_r$.</div>');
-    K.quiz(P.quiz, {
-      q: "A river 100 m wide flows at 3 m/s. A swimmer who can swim at 5 m/s in still water wants to reach the point directly opposite. How long does the crossing take?",
-      options: ["20 s", "25 s", "33.3 s", "12.5 s"], answer: 1,
-      explain: "To cancel the current he aims upstream with $5\\sin\\alpha = 3$, so $\\sin\\alpha = 0.6$ and his across speed is $5\\cos\\alpha = 4$ m/s. Time $= 100 / 4 = 25$ s. Set $d = 100$, $v_r = 3$, $v_b = 5$ and press <i>Aim to land opposite</i> to check."
-    });
+    function apply(s) { dS.set(s.d); rS.set(s.vr); bS.set(s.vb); aS.set(s.a); reset(); }
+    K.practice(P.quiz, [
+      { level: "easy", tag: "drift", setup: { d: 60, vr: 3, vb: 4, a: 0 }, watch: "Predict the drift, then press Go",
+        q: "A boat that moves at 4 m/s in still water points straight across a 60 m river flowing at 3 m/s. How far downstream does it land?",
+        options: ["20 m", "45 m", "60 m", "80 m"], answer: 1,
+        explain: "Only the across speed matters for time: $t = 60/4 = 15$ s. Meanwhile the current carries it $3 \\times 15 = 45$ m downstream." },
+      { level: "medium", tag: "land directly opposite", setup: { d: 100, vr: 3, vb: 5, a: 37 }, watch: "Predict the time, then press Go",
+        q: "A river 100 m wide flows at 3 m/s. A swimmer who can swim at 5 m/s in still water wants to reach the point directly opposite. How long does the crossing take?",
+        options: ["20 s", "25 s", "33.3 s", "12.5 s"], answer: 1,
+        hints: ["To land opposite, the upstream part of the swimmer's velocity must cancel the current: $v_b\\sin\\alpha = v_r$.", "What's left goes straight across: $v_b\\cos\\alpha$."],
+        explain: "$5\\sin\\alpha = 3$ gives $\\sin\\alpha = 0.6$, so the across speed is $5\\cos\\alpha = 4$ m/s and the time is $100/4 = 25$ s. Pointing straight across would take only 20 s, but land 60 m downstream." },
+      { level: "hard", tag: "when the current wins", setup: { d: 80, vr: 5, vb: 3, a: 37 }, watch: "Note the drift, then try α = 0° and α = 50°: both should drift more",
+        q: "An 80 m wide river flows at 5 m/s, but the boat manages only 3 m/s in still water. What is the smallest possible drift, and which way should the boat point?",
+        options: ["133 m, pointing straight across", "107 m, pointing 37° upstream", "80 m, pointing 53° upstream", "0 m, pointing 90° upstream"], answer: 1,
+        hints: ["It can't cancel the current. Minimise drift per metre crossed: $\\dfrac{x}{d} = \\dfrac{v_r - v_b\\sin\\alpha}{v_b\\cos\\alpha}$.", "Differentiate with respect to $\\alpha$ and set it to zero: you'll get $\\sin\\alpha = v_b / v_r$."],
+        explain: "The drift is least at $\\sin\\alpha = v_b/v_r = 0.6$, so $\\alpha \\approx 37°$ upstream. Then the across speed is $3\\cos 37° = 2.4$ m/s, so $t = 33.3$ s, the downstream speed is $5 - 3(0.6) = 3.2$ m/s, and the drift is $3.2 \\times 33.3 \\approx 107$ m. Pointing straight across drifts $5 \\times 80/3 = 133$ m." }
+    ], apply, P);
 
     var tries = K.Tries(P.tries, lab.id, lab.tries, function () { K.refreshProgress(document); count(); });
     function count() { P.triesCount.textContent = tries.count() + " of " + tries.total + " done"; }

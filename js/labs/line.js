@@ -246,11 +246,23 @@
       "<p>With constant $a$, three equations tie it together: $v = u + at$, $s = ut + \\tfrac12at^2$ and $v^2 = u^2 + 2as$. The engine never uses them. It just steps time forward, and the numbers still agree.</p>" +
       '<div class="trap"><b>JEE trap: distance ≠ displacement.</b> When the cart turns around, displacement $s$ can shrink back to zero while distance keeps growing. ' +
       "For distance, split the motion at $v = 0$ and add the two pieces.</div>");
-    K.quiz(P.quiz, {
-      q: "A car moving at 20 m/s brakes with a uniform deceleration of 5 m/s². How far does it travel before it stops?",
-      options: ["20 m", "40 m", "80 m", "100 m"], answer: 1,
-      explain: "Use $v^2 = u^2 + 2as$ with $v = 0$: $0 = 20^2 + 2(-5)s$, so $s = 40$ m. Try it: set $x_0 = 0$, $u = 20$, $a = -5$ (the <i>Hard brake</i> preset) and watch it stop on the 40 m mark."
-    });
+    function apply(s) { x0S.set(s.x0); uS.set(s.u); aS.set(s.a); reset(); }
+    K.practice(P.quiz, [
+      { level: "easy", tag: "stopping distance", setup: { x0: 0, u: 20, a: -5 }, watch: "Predict where it stops, then press Play",
+        q: "A car moving at 20 m/s brakes with a uniform deceleration of 5 m/s². How far does it travel before it stops?",
+        options: ["20 m", "40 m", "80 m", "100 m"], answer: 1,
+        explain: "Use $v^2 = u^2 + 2as$ with $v = 0$: $0 = 20^2 + 2(-5)s$, so $s = 40$ m. In the lab it stops right on the 40 m mark." },
+      { level: "medium", tag: "distance vs displacement", setup: { x0: 10, u: 12, a: -3 }, watch: "Predict both, then pause at t = 6 s and read distance and displacement",
+        q: "A cart starts at $x_0 = 10$ m with $u = 12$ m/s and $a = -3$ m/s². What total <i>distance</i> does it cover in the first 6 s?",
+        options: ["18 m", "24 m", "30 m", "36 m"], answer: 2,
+        hints: ["Does the velocity reach zero before 6 s? Use $v = u + at$.", "Split the motion at the turning point and add the two pieces."],
+        explain: "It stops at $t = 12/3 = 4$ s, after going $u^2/2|a| = 144/6 = 24$ m. In the next 2 s it comes back $\\tfrac12(3)(2)^2 = 6$ m. Distance $= 24 + 6 = 30$ m, but displacement is only $24 - 6 = 18$ m. Pause at 6 s and compare the two readouts." },
+      { level: "hard", tag: "distance in the nth second", setup: { x0: 0, u: 0, a: 4 }, watch: "Predict, then read the ghost carts at 2, 3, 4 and 5 s",
+        q: "A particle starts from rest with constant acceleration and covers 10 m during the 3rd second. How far does it travel during the 5th second?",
+        options: ["14 m", "18 m", "20 m", "26 m"], answer: 1,
+        hints: ["Distance in the $n$th second is $s(n) - s(n-1)$, not $s(n)$.", "From rest that's $\\tfrac12 a n^2 - \\tfrac12 a (n-1)^2 = a(n - \\tfrac12)$. Use the 3rd second to find $a$."],
+        explain: "$s_{n\\text{th}} = a(n - \\tfrac12)$. The 3rd second gives $10 = 2.5a$, so $a = 4$ m/s², and the 5th second gives $4 \\times 4.5 = 18$ m. In the lab the ghost carts sit at 8, 18, 32 and 50 m at 2, 3, 4 and 5 s: gaps of 10 m and 18 m." }
+    ], apply, P);
 
     var transportUI = K.transport(P, sim, { onReset: reset, onPlay: function () { if (ended) reset(); } });
     reset();

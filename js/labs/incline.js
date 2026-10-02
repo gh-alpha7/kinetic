@@ -251,11 +251,23 @@
       "<p>On a slope, tilt your axes to match it. Gravity $mg$ then has two parts: <b class=\"c-grav\">$mg\\sin\\theta$ down the slope</b> and <b class=\"c-grav\">$mg\\cos\\theta$ into it</b>. The ramp pushes back with <b class=\"c-normal\">$N = mg\\cos\\theta$</b>, which is less than the weight.</p>" +
       "<p>Along the slope it's a tug of war: $mg\\sin\\theta$ against <b class=\"c-fric\">friction</b>. While $\\tan\\theta \\le \\mu_s$, static friction wins and the block stays put. Past that it slides with $a = g(\\sin\\theta - \\mu_k\\cos\\theta)$, the same for every mass.</p>" +
       '<div class="trap"><b>JEE trap: friction flips direction with the motion.</b> Sliding up, friction points down the slope, adding to gravity: $a = g(\\sin\\theta + \\mu_k\\cos\\theta)$. Sliding down, it points up: $a = g(\\sin\\theta - \\mu_k\\cos\\theta)$. Use the wrong one and every later step is off.</div>');
-    K.quiz(P.quiz, {
-      q: "A block slides down a 30° incline with $\\mu_k = 0.2$. Taking $g = 10$ m/s², what is its acceleration?",
-      options: ["5.0 m/s²", "3.27 m/s²", "6.73 m/s²", "4.0 m/s²"], answer: 1,
-      explain: "$a = g(\\sin 30° - \\mu_k\\cos 30°) = 10(0.5 - 0.2 \\times 0.866) = 3.27$ m/s². 6.73 m/s² is the deceleration you'd get sliding <i>up</i> the slope, a common mix-up."
-    });
+    function apply(s) { tS.set(s.th); mS.set(s.m); uS.set(s.u); msS.set(s.mus); mkS.set(s.muk); reset(); }
+    K.practice(P.quiz, [
+      { level: "easy", tag: "smooth incline", setup: { th: 30, m: 2, u: 0, mus: 0, muk: 0 }, watch: "Predict a, then press Release",
+        q: "A block slides down a smooth (frictionless) incline at 30° ($g = 9.8$). What is its acceleration?",
+        options: ["9.80 m/s²", "8.49 m/s²", "4.90 m/s²", "2.45 m/s²"], answer: 2,
+        explain: "Only $mg\\sin\\theta$ acts along a smooth slope, so $a = g\\sin 30° = 4.9$ m/s², exactly half of $g$. 8.49 m/s² is $g\\cos 30°$, the component pressing into the ramp." },
+      { level: "medium", tag: "sliding with friction", setup: { th: 30, m: 2, u: 0, mus: 0.3, muk: 0.2 }, watch: "Predict a, then press Release",
+        q: "A block is released on a 30° incline with $\\mu_s = 0.3$ and $\\mu_k = 0.2$ ($g = 9.8$). What is its acceleration?",
+        options: ["4.90 m/s²", "3.20 m/s²", "6.60 m/s²", "0 m/s² (it stays put)"], answer: 1,
+        hints: ["Check first: does it slide at all? Compare $\\tan 30°$ with $\\mu_s$.", "Along the slope: $ma = mg\\sin\\theta - \\mu_k mg\\cos\\theta$."],
+        explain: "$\\tan 30° = 0.577 > 0.3$, so it slides. Then $a = 9.8(0.5 - 0.2 \\times 0.866) = 3.20$ m/s². 6.60 m/s² is what you'd get with friction pointing the wrong way. (With $g = 10$ the textbook answer is 3.27 m/s².)" },
+      { level: "hard", tag: "up and back down", setup: { th: 37, m: 2, u: 8, mus: 0.25, muk: 0.25 }, watch: "Predict the return speed, then press Release and watch the v–t graph",
+        q: "A block is flicked up a 37° incline at 8 m/s; $\\mu_s = \\mu_k = 0.25$ ($g = 9.8$). How fast is it moving when it slides back down to where it started?",
+        options: ["8.0 m/s", "5.7 m/s", "4.1 m/s", "0 m/s: it stays at the top"], answer: 1,
+        hints: ["Going up, gravity and friction both pull down the slope: $a = g(\\sin\\theta + \\mu\\cos\\theta)$. Find how far it climbs with $v^2 = u^2 - 2as$.", "Check it doesn't stick at the top ($\\tan 37°$ vs $\\mu_s$). Coming down, friction flips: $a = g(\\sin\\theta - \\mu\\cos\\theta)$ over the same distance."],
+        explain: "Up: $a = 9.8(0.602 + 0.25 \\times 0.799) = 7.86$ m/s², so it climbs $8^2/(2 \\times 7.86) = 4.07$ m. Since $\\tan 37° = 0.75 > 0.25$ it slides back, with $a = 9.8(0.602 - 0.25 \\times 0.799) = 3.94$ m/s². Over 4.07 m: $v = \\sqrt{2 \\times 3.94 \\times 4.07} \\approx 5.7$ m/s. It comes back slower than it left, because friction acted on the way up and down." }
+    ], apply, P);
 
     var tries = K.Tries(P.tries, lab.id, lab.tries, function () { K.refreshProgress(document); count(); });
     function count() { P.triesCount.textContent = tries.count() + " of " + tries.total + " done"; }

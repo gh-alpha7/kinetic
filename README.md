@@ -4,6 +4,16 @@ Interactive IIT JEE physics labs built on a real 2D physics engine
 ([matter.js](https://brm.io/matter-js/)). Students change the numbers, throw things
 and switch frames of reference, and watch the textbook formulas come true.
 
+## Catalog
+
+Topics are arranged like a catalog rather than a row of tabs, so the site can grow to the whole syllabus:
+
+- **`#/topics`**: every unit (Mechanics, Oscillations & waves, Heat & thermodynamics, Electricity & magnetism, Optics, Modern physics), each chapter as a card with its labs and your progress, and chapters that are coming soon with the topics planned for them. Search covers lab titles, descriptions and experiments; filters show what's ready or coming; a side list jumps between units.
+- **Topics menu** in the header: the same tree in a drop-down, with a search box.
+- **Breadcrumbs** on every lab: Topics › unit › chapter.
+
+The syllabus lives in `UNITS` and `CHAPTERS` in `core.js`. A chapter shows as coming soon until a lab registers into it, then it goes live everywhere by itself.
+
 ## Chapter 1: Kinematics
 
 | Lab | What you play with | What it teaches |
@@ -82,13 +92,14 @@ Plain static site, no build step.
 | `css/style.css` | Design: one colour per quantity (blue displacement, green velocity, orange acceleration, purple gravity), light and dark |
 | `js/core.js` | SI-unit simulation wrapper, fixed-step clock with slow motion, zoom/pan camera, drawing helpers, graphs, sliders, self-checking experiments, practice questions, lab page scaffold |
 | `js/labs/*.js` | One file per lab: `line`, `projectile`, `relative` (kinematics); `forces`, `incline`, `pulleys` (laws of motion) |
+| `js/catalog.js` | Catalog page and the header Topics menu, built from the syllabus and the registered labs |
 | `js/maps.js` | Concept map: nodes, cause → effect edges, layered layout, per-lab and whole-course views |
 | `js/playground.js` | Playground: parts, editor, string/friction/spring/gravity/turntable solver, presets, challenges |
 | `js/home.js` | Landing page with a throw-things-around sandbox |
-| `js/app.js` | Hash router (`#/`, `#/map`, `#/playground`, `#/<chapter>/<lab>`) |
+| `js/app.js` | Hash router (`#/`, `#/topics`, `#/map`, `#/playground`, `#/<chapter>/<lab>`) |
 
 To add a lab, create `js/labs/<name>.js` that calls `K.registerLab({ id, chapter, title, short, lede, tries, mount })`
-and include it in `index.html`. Chapters are listed in `CHAPTERS` in `core.js`; navigation, the home page cards and
+and include it in `index.html`. Chapters are listed in `CHAPTERS` (grouped by `UNITS`) in `core.js`; the catalog, the Topics menu, the home page cards and
 the pager follow from that. The scaffold gives it the stage, graphs, maths, readouts, experiments,
 explanation, concept-map and practice regions. Add the lab's concepts to `LAB_NODES` in `maps.js`.
 

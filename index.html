@@ -12,7 +12,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,700&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css" />
-  <link rel="stylesheet" href="css/style.css?v=11" />
+  <link rel="stylesheet" href="css/style.css?v=14" />
 </head>
 <body>
   <a class="skip" href="#app">Skip to content</a>
@@ -22,15 +22,13 @@
         <svg viewBox="0 0 64 64" aria-hidden="true"><path d="M10 50 Q32 0 54 50" fill="none" stroke="var(--vel)" stroke-width="5" stroke-linecap="round" stroke-dasharray="2 8"/><circle cx="54" cy="50" r="7" fill="var(--acc)"/></svg>
         <span>kinetic</span>
       </a>
-      <nav class="chapters" aria-label="Chapters">
-        <a href="#/kinematics/line" data-chapter="kinematics">Kinematics</a>
-        <a href="#/laws/forces" data-chapter="laws">Laws of motion</a>
+      <nav class="chapters" aria-label="Main">
+        <button class="topics-btn" type="button" aria-expanded="false" aria-controls="topics-panel" data-chapter="topics">Topics <svg viewBox="0 0 12 12" aria-hidden="true"><path d="M2.5 4.5L6 8l3.5-3.5"/></svg></button>
         <a href="#/playground" data-chapter="playground">Playground</a>
-        <a href="#/map" data-chapter="map">Concept map</a>
-        <span class="soon" title="Coming soon">Work &amp; energy</span>
-        <span class="soon" title="Coming soon">Rotation</span>
+        <a href="#/map" data-chapter="map"><span class="lg-only">Concept map</span><span class="sm-only">Map</span></a>
       </nav>
     </div>
+    <div class="topics-panel" id="topics-panel" hidden></div>
   </header>
 
   <main id="app" tabindex="-1"></main>
@@ -41,16 +39,17 @@
 
   <script src="https://cdn.jsdelivr.net/npm/matter-js@0.20.0/build/matter.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js"></script>
-  <script src="js/core.js?v=7"></script>
-  <script src="js/labs/line.js?v=7"></script>
-  <script src="js/labs/projectile.js?v=8"></script>
-  <script src="js/labs/relative.js?v=7"></script>
-  <script src="js/labs/forces.js?v=7"></script>
-  <script src="js/labs/incline.js?v=7"></script>
-  <script src="js/labs/pulleys.js?v=7"></script>
-  <script src="js/maps.js?v=9"></script>
-  <script src="js/playground.js?v=9"></script>
-  <script src="js/home.js?v=8"></script>
-  <script src="js/app.js?v=8"></script>
+  <script src="js/core.js?v=8"></script>
+  <script src="js/labs/line.js?v=8"></script>
+  <script src="js/labs/projectile.js?v=9"></script>
+  <script src="js/labs/relative.js?v=8"></script>
+  <script src="js/labs/forces.js?v=8"></script>
+  <script src="js/labs/incline.js?v=8"></script>
+  <script src="js/labs/pulleys.js?v=8"></script>
+  <script src="js/maps.js?v=10"></script>
+  <script src="js/catalog.js?v=2"></script>
+  <script src="js/playground.js?v=10"></script>
+  <script src="js/home.js?v=9"></script>
+  <script src="js/app.js?v=9"></script>
 </body>
 </html>

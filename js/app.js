@@ -1,19 +1,27 @@
-/* Tiny hash router: #/ is home, #/map is the concept map, #/playground the sandbox, #/<chapter>/<lab> is a lab. */
+/* Tiny hash router: #/ is home, #/topics[/query] the catalog, #/map the concept map,
+   #/playground the sandbox, #/<chapter>/<lab> a lab. */
 (function () {
   "use strict";
   var app = document.getElementById("app"), destroy = null;
+  Catalog.initMenu(document.querySelector(".topics-btn"), document.getElementById("topics-panel"));
 
   function route() {
     var parts = location.hash.replace(/^#\/?/, "").split("/");
     if (parts[0] === "how") return;                         // in-page anchor on the home page
     if (destroy) { destroy(); destroy = null; }
     app.innerHTML = "";
-    var labs = K.chapter(parts[0]) ? K.chapterLabs(parts[0]) : [];
-    document.querySelectorAll(".chapters a[data-chapter]").forEach(function (a) {
-      if (a.dataset.chapter === parts[0] && (labs.length || parts[0] === "map" || parts[0] === "playground")) a.setAttribute("aria-current", "page");
+    var ch = K.chapter(parts[0]), labs = ch ? K.chapterLabs(parts[0]) : [];
+    // "Topics" stays lit on the catalog and inside any lab
+    var section = ch ? "topics" : parts[0];
+    document.querySelectorAll(".chapters [data-chapter]").forEach(function (a) {
+      if (a.dataset.chapter === section) a.setAttribute("aria-current", "page");
       else a.removeAttribute("aria-current");
     });
-    if (parts[0] === "playground") {
+    if (parts[0] === "topics" || (ch && !labs.length)) {
+      // a chapter that's coming soon opens the catalog, filtered to it
+      destroy = Catalog.mount(app, ch ? ch.title : decodeURIComponent(parts[1] || ""));
+      document.title = "All topics · Kinetic";
+    } else if (parts[0] === "playground") {
       destroy = Playground.mount(app, parts[1]);
       document.title = "Playground · Kinetic";
     } else if (parts[0] === "map") {

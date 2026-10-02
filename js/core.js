@@ -552,11 +552,39 @@ var K = (function () {
 
   /* ---------- lab page scaffold ---------- */
   var labs = [];
-  // chapters in the order they appear; labs register into them
-  var CHAPTERS = [
-    { id: "kinematics", title: "Kinematics" },
-    { id: "laws", title: "Laws of motion" }
+  // The JEE syllabus: units hold chapters, chapters hold labs (labs register themselves into a chapter).
+  // A chapter with no labs yet shows as "coming soon" with the topics planned for it.
+  var UNITS = [
+    { id: "mechanics", title: "Mechanics", blurb: "Motion, forces, energy, rotation and gravity." },
+    { id: "waves", title: "Oscillations & waves", blurb: "Things that repeat: springs, pendulums, strings and sound." },
+    { id: "thermal", title: "Heat & thermodynamics", blurb: "Temperature, heat flow, engines and gas molecules." },
+    { id: "em", title: "Electricity & magnetism", blurb: "Charges, fields, circuits and induction." },
+    { id: "optics", title: "Optics", blurb: "Light as rays and as waves." },
+    { id: "modern", title: "Modern physics", blurb: "Photons, atoms, nuclei and semiconductors." }
   ];
+  var CHAPTERS = [
+    { id: "kinematics", unit: "mechanics", title: "Kinematics", blurb: "Describing motion: where, how fast, and how that changes." },
+    { id: "laws", unit: "mechanics", title: "Laws of motion", blurb: "Forces and why things move: free-body diagrams, friction, inclines and pulleys." },
+    { id: "work", unit: "mechanics", title: "Work, energy & power", blurb: "Where energy goes, and what it can do.", planned: ["Work by a variable force", "Work–energy theorem", "Springs and potential energy", "Power", "Collisions"] },
+    { id: "rotation", unit: "mechanics", title: "Rotational motion", blurb: "Spinning things and why they're harder to stop.", planned: ["Torque", "Moment of inertia", "Rolling without slipping", "Angular momentum"] },
+    { id: "gravitation", unit: "mechanics", title: "Gravitation", blurb: "Falling apples and orbiting moons are the same thing.", planned: ["Orbits", "Escape velocity", "Kepler's laws", "g with height and depth"] },
+    { id: "matter", unit: "mechanics", title: "Properties of matter", blurb: "How solids stretch and fluids push.", planned: ["Elasticity", "Pressure and buoyancy", "Viscosity and terminal velocity", "Surface tension"] },
+    { id: "shm", unit: "waves", title: "Simple harmonic motion", blurb: "Any restoring force proportional to displacement.", planned: ["Spring–mass systems", "Pendulums", "Energy in SHM", "Damping and resonance"] },
+    { id: "sound", unit: "waves", title: "Waves & sound", blurb: "Energy travelling without matter travelling.", planned: ["Travelling waves", "Standing waves on strings", "Organ pipes", "Beats", "Doppler effect"] },
+    { id: "heat", unit: "thermal", title: "Thermal properties", blurb: "Expansion, calorimetry and heat transfer.", planned: ["Thermal expansion", "Calorimetry", "Conduction", "Radiation"] },
+    { id: "thermo", unit: "thermal", title: "Thermodynamics", blurb: "Energy accounting for gases and engines.", planned: ["First law", "Isothermal and adiabatic", "Heat engines"] },
+    { id: "ktg", unit: "thermal", title: "Kinetic theory", blurb: "Pressure and temperature from molecules bouncing around.", planned: ["Molecules in a box", "Pressure from collisions", "Speed distribution"] },
+    { id: "electrostatics", unit: "em", title: "Electrostatics", blurb: "Charges at rest and the fields they make.", planned: ["Coulomb's law", "Field lines", "Gauss's law", "Potential", "Capacitors"] },
+    { id: "current", unit: "em", title: "Current electricity", blurb: "Charges on the move through circuits.", planned: ["Ohm's law", "Kirchhoff's laws", "Wheatstone bridge", "RC circuits"] },
+    { id: "magnetism", unit: "em", title: "Magnetism", blurb: "Moving charges push on each other sideways.", planned: ["Force on a moving charge", "Biot–Savart law", "Ampère's law", "Cyclotron"] },
+    { id: "emi", unit: "em", title: "EMI & AC", blurb: "Changing fields make currents.", planned: ["Faraday's law", "Lenz's law", "Inductance", "LCR circuits"] },
+    { id: "rays", unit: "optics", title: "Ray optics", blurb: "Mirrors, lenses and bending light.", planned: ["Reflection", "Refraction and total internal reflection", "Lenses", "Prisms", "Optical instruments"] },
+    { id: "waveoptics", unit: "optics", title: "Wave optics", blurb: "When light behaves like a wave.", planned: ["Young's double slit", "Diffraction", "Polarisation"] },
+    { id: "dual", unit: "modern", title: "Dual nature", blurb: "Light as particles, electrons as waves.", planned: ["Photoelectric effect", "de Broglie waves"] },
+    { id: "atoms", unit: "modern", title: "Atoms & nuclei", blurb: "Inside the atom.", planned: ["Bohr model", "Spectra", "Radioactive decay", "Binding energy"] },
+    { id: "semi", unit: "modern", title: "Semiconductors", blurb: "The physics inside every chip.", planned: ["p–n junction", "Diodes", "Logic gates"] }
+  ];
+  function unitOf(ch) { return UNITS.filter(function (u) { return u.id === ch.unit; })[0]; }
   function registerLab(lab) { labs.push(lab); }
   function chapterLabs(id) { return labs.filter(function (l) { return l.chapter === id; }); }
   function chapter(id) { return CHAPTERS.filter(function (c) { return c.id === id; })[0]; }
@@ -582,7 +610,7 @@ var K = (function () {
           }).join("") +
         "</nav>" +
         '<div class="lab-main">' +
-          '<header class="lab-head"><p class="eyebrow">' + ch.title + " · lab " + (i + 1) + " of " + list.length + "</p><h1>" + lab.title + '</h1><p class="lede">' + md(lab.lede) + "</p></header>" +
+          '<header class="lab-head"><p class="eyebrow crumbs"><a href="#/topics">Topics</a> › ' + unitOf(ch).title + " › " + ch.title + " · lab " + (i + 1) + " of " + list.length + "</p><h1>" + lab.title + '</h1><p class="lede">' + md(lab.lede) + "</p></header>" +
           '<div class="stage-row">' +
             '<div class="stage-col"><div class="stage"><canvas></canvas><div class="hud"></div><div class="stage-note"></div>' +
               '<div class="stage-bar">' +
@@ -677,7 +705,7 @@ var K = (function () {
     STEP: STEP, DT: DT, DEG: DEG, theme: theme, h: h, fmt: fmt, alpha: alpha, clamp: clamp, md: md, tex: tex,
     slider: slider, seg: seg, check: check, Sim: Sim, Graph: Graph, arrow: arrow, label: label,
     Tries: Tries, quiz: quiz, practice: practice, labs: labs, registerLab: registerLab, scaffold: scaffold, refreshProgress: refreshProgress,
-    CHAPTERS: CHAPTERS, chapterLabs: chapterLabs, chapter: chapter,
+    UNITS: UNITS, CHAPTERS: CHAPTERS, unitOf: unitOf, chapterLabs: chapterLabs, chapter: chapter, progress: progress,
     transport: transport, readout: readout, flash: flash, throttle: throttle
   };
 })();

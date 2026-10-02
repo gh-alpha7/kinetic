@@ -3,35 +3,29 @@ var Home = (function () {
   "use strict";
 
   function mount(root) {
-    var BLURB = {
-      kinematics: "Describing motion: where, how fast, and how that changes.",
-      laws: "Forces and why things move: free-body diagrams, friction, inclines and pulleys."
-    };
+    var st = Catalog.stats(Catalog.tree());
     function live(ch) {
       var list = K.chapterLabs(ch.id);
-      return '<a class="chapter-card live" href="#/' + ch.id + "/" + list[0].id + '"><span class="tag">live · ' + list.length + " labs</span><h3>" + ch.title + "</h3>" +
-        "<p>" + (BLURB[ch.id] || "") + "</p><ul>" +
+      return '<a class="chapter-card live" href="#/' + ch.id + "/" + list[0].id + '"><span class="tag">' + K.unitOf(ch).title + " · " + list.length + " labs</span><h3>" + ch.title + "</h3>" +
+        "<p>" + ch.blurb + "</p><ul>" +
         list.map(function (l) { return "<li>" + l.title + ' <span class="muted">· ' + l.short + "</span></li>"; }).join("") + "</ul></a>";
     }
     var el = K.h(
       '<div class="home">' +
         '<section class="hero">' +
           "<div>" +
-            '<p class="mono muted">IIT JEE · Physics · Mechanics</p>' +
+            '<p class="mono muted">IIT JEE · Physics</p>' +
             "<h1>Physics you can <em>poke</em>.</h1>" +
             '<p class="lede">Every chapter is a little lab built on a real physics engine. Change a number, throw a ball, flip your frame of reference, and watch the JEE formulas come true in front of you.</p>' +
-            '<div class="cta"><a class="btn btn-primary" href="#/kinematics/line">Start with kinematics →</a><a class="btn" href="#/playground">Open the playground</a><a class="btn" href="#/map">See the concept map</a><a class="btn" href="#how">How it works</a></div>' +
+            '<div class="cta"><a class="btn btn-primary" href="#/kinematics/line">Start with kinematics →</a><a class="btn" href="#/topics">Browse all topics</a><a class="btn" href="#/playground">Open the playground</a><a class="btn" href="#/map">See the concept map</a><a class="btn" href="#how">How it works</a></div>' +
           "</div>" +
           '<div class="play"><canvas aria-label="Physics sandbox: drag and throw the objects"></canvas>' +
             '<p class="play-hint">grab anything and throw it</p><p class="play-readout"></p></div>' +
         "</section>" +
-        '<h2 class="section-title">Chapters</h2>' +
+        '<h2 class="section-title">Ready to play <a class="section-more" href="#/topics">All ' + st.chapters + " chapters →</a></h2>" +
         '<div class="chapter-grid">' +
           K.CHAPTERS.filter(function (c) { return K.chapterLabs(c.id).length; }).map(live).join("") +
-          card("Work, energy & power", "Springs, loops, collisions, and where energy goes.") +
-          card("Rotational motion", "Torque, moment of inertia, rolling without slipping.") +
-          card("Gravitation", "Orbits, escape velocity, and Kepler's laws.") +
-          card("Oscillations", "Springs and pendulums: simple harmonic motion.") +
+          browse() +
         "</div>" +
         '<h2 class="section-title" id="how">How it works</h2>' +
         '<div class="how">' +
@@ -41,8 +35,10 @@ var Home = (function () {
         "</div>" +
       "</div>");
     root.appendChild(el);
-    function card(title, text) {
-      return '<div class="chapter-card"><span class="tag">coming soon</span><h3>' + title + "</h3><p>" + text + "</p></div>";
+    function browse() {
+      var next = K.CHAPTERS.filter(function (c) { return !K.chapterLabs(c.id).length; }).slice(0, 4).map(function (c) { return c.title; });
+      return '<a class="chapter-card browse" href="#/topics"><span class="tag">catalog · ' + st.units + " units</span><h3>Browse all " + st.chapters + " chapters</h3>" +
+        "<p>The whole JEE syllabus in one place. Coming next: " + next.join(", ") + '.</p><span class="go">Open the catalog →</span></a>';
     }
 
     /* ---------- sandbox ---------- */

@@ -25,7 +25,7 @@
       destroy = Playground.mount(app, parts[1]);
       document.title = "Playground · Kinetic";
     } else if (parts[0] === "map") {
-      destroy = Maps.mount(app);
+      destroy = MapEditor.mount(app, parts[1]);
       document.title = "Concept map · Kinetic";
     } else if (labs.length) {
       var lab = labs.filter(function (l) { return l.id === parts[1]; })[0] || labs[0];

@@ -149,6 +149,7 @@ var Maps = (function () {
     svg += "</svg>";
 
     el.innerHTML = '<div class="cmap-scroll">' + svg + '</div><div class="cmap-detail" aria-live="polite"><p class="muted">Tap a concept to light up what causes it and what it leads to.</p></div>';
+    if (opts.labId) el.insertAdjacentHTML("beforeend", '<p class="cmap-more"><a href="#/map">Open the full map: move, connect and add your own ideas →</a></p>');
     var root = el.querySelector("svg"), detail = el.querySelector(".cmap-detail");
 
     function chain(id, dir) {                          // all ancestors (dir 0) or descendants (dir 1)

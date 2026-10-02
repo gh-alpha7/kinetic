@@ -460,3 +460,57 @@ button, input, select { font: inherit; color: inherit; }
   .brand svg { width: 26px; height: 26px; }
   .chapters a, .topics-btn { padding: 6px 7px; }
 }
+
+/* ---------- concept-map editor ---------- */
+.me-toolbar { display: flex; flex-wrap: wrap; align-items: center; gap: 6px; margin-top: 18px; }
+.me-toolbar .spacer { flex: 1; }
+.me-toolbar [aria-pressed="true"] { background: var(--ink); color: var(--bg); border-color: var(--ink); }
+.me-sep { width: 1px; height: 22px; background: var(--line); margin: 0 4px; }
+.me-hint { font-size: 12px; margin: 8px 2px; min-height: 1.4em; }
+.me-wrap { display: grid; grid-template-columns: minmax(0, 1fr) 320px; gap: 16px; align-items: start; }
+.me-canvas { position: relative; height: min(72vh, 760px); min-height: 420px; border-radius: 18px; border: 1px solid var(--line); background: var(--canvas-bg); overflow: hidden;
+  background-image: radial-gradient(var(--grid-strong) 1px, transparent 1px); background-size: 22px 22px; }
+.me-svg { width: 100%; height: 100%; touch-action: none; cursor: grab; user-select: none; -webkit-user-select: none; }
+.me-svg:active { cursor: grabbing; }
+.me-canvas.connect .me-svg, .me-canvas.connect .me-node { cursor: crosshair; }
+.me-node { cursor: move; }
+.me-node.pending rect { stroke-width: 3; stroke-dasharray: 6 4; }
+.me-node.folded rect { stroke-width: 2.5; }
+.me-handle { fill: var(--surface); stroke: var(--c); stroke-width: 2; opacity: 0; cursor: crosshair; transition: opacity .12s; }
+.me-node:hover .me-handle, .me-node.sel .me-handle, .me-canvas.connect .me-handle { opacity: 1; }
+.me-toggle { cursor: pointer; }
+.me-toggle circle { fill: var(--surface); stroke: var(--c); stroke-width: 1.5; }
+.me-toggle text { fill: var(--ink) !important; font: 700 10px var(--mono) !important; pointer-events: none; }
+.me-node.folded .me-toggle circle { fill: var(--c); }
+.me-node.folded .me-toggle text { fill: var(--surface) !important; }
+.me-edge { cursor: pointer; }
+.me-hit { fill: none; stroke: transparent; stroke-width: 14; }
+.me-line { marker-end: url(#me-a); }
+.cmap .me-edge.cause .me-line { marker-end: url(#me-ac); }
+.cmap .me-edge.effect .me-line { marker-end: url(#me-av); }
+.me-edge text { paint-order: stroke; stroke: var(--canvas-bg); stroke-width: 4px; stroke-linejoin: round; pointer-events: none; }
+.me-edge:hover .me-line { opacity: 1; stroke: var(--ink); }
+.cmap .me-edge.esel .me-line { stroke: var(--ink); stroke-width: 2.6; opacity: 1; marker-end: url(#me-ai); }
+.cmap .me-edge.esel text { fill: var(--ink); font-weight: 700; }
+.me-preview { stroke: var(--ink); stroke-width: 2; stroke-dasharray: 6 4; pointer-events: none; }
+.me-side { position: sticky; top: 76px; margin-top: 0; display: grid; gap: 10px; max-height: calc(100vh - 96px); overflow-y: auto; }
+.me-side h3 { margin: 0; }
+.me-field { display: grid; gap: 4px; }
+.me-field > span { font: 600 11px var(--mono); text-transform: uppercase; letter-spacing: .06em; color: var(--muted); }
+.me-field input, .me-field textarea, .me-field select { width: 100%; padding: 8px 10px; border-radius: 10px; border: 1px solid var(--line); background: var(--surface); color: var(--ink); font: 500 14px var(--sans); resize: vertical; }
+.me-field input[data-f="label"] { font: 700 16px var(--serif); }
+.me-swatches { display: flex; flex-wrap: wrap; gap: 6px; }
+.me-swatches button { width: 24px; height: 24px; border-radius: 50%; border: 2px solid var(--surface); background: var(--c); box-shadow: 0 0 0 1px var(--line); cursor: pointer; }
+.me-swatches button[aria-pressed="true"] { box-shadow: 0 0 0 2px var(--ink); }
+.me-actions { display: flex; flex-wrap: wrap; gap: 6px; }
+.me-link { border: 0; background: none; padding: 0; font: 700 14px var(--sans); color: var(--ink); text-decoration: underline; text-decoration-color: var(--line); cursor: pointer; }
+.me-link:hover { text-decoration-color: var(--ink); }
+.me-arrow { font-size: 15px; }
+.me-help { margin: 0; padding-left: 18px; font-size: 14px; display: grid; gap: 6px; }
+.cmap-more { margin-top: 10px; font-size: 14px; }
+@media (max-width: 860px) {
+  .me-wrap { grid-template-columns: 1fr; }
+  .me-side { position: static; max-height: none; }
+  .me-canvas { height: 62vh; }
+  .me-toolbar .spacer { display: none; }
+}

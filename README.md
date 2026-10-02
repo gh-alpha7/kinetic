@@ -59,6 +59,16 @@ matter.js only finds contacts and their normal impulses. Everything else is solv
 
 `#/map` draws every idea in the course as one cause → effect graph: weight splits on a slope, the normal force caps friction, friction goes into the free-body diagram, net force sets acceleration, acceleration changes velocity, and so on. Each arrow carries a verb ('sets max of', 'changes', 'if zero'). Tapping a concept lights up the whole chain that causes it (orange) and the chain it leads to (green), says in one line why it matters, and links to the lab that teaches it. Remembering the chain makes the separate facts quicker to recall.
 
+The map is editable, so students can make it their own:
+
+- **Move** ideas by dragging; pan by dragging the background; zoom with the buttons, Ctrl + scroll or a pinch.
+- **Connect** two ideas by dragging from the dot on an idea's right edge onto another (or use Connect mode: click the cause, then the effect), then give the arrow a verb. Arrows can be reworded, reversed or deleted.
+- **Collapse / expand**: the − / + under an idea folds away everything downstream of it (ideas still reached another way stay visible), with a count of what's hidden. Collapse all leaves only the root causes.
+- **Add** ideas with the button or a double-click, and edit any idea's name, 'why it matters', colour and the lab that teaches it.
+- Undo, Tidy up (re-layout), Fit, Reset, Copy link, Download and Import (JSON). Edits save in the browser. Ideas added to the course later still appear in a saved map unless the student deleted them.
+
+Each lab's 'How it connects' panel keeps showing the course's original map and links to the editor.
+
 ## Physics accuracy
 
 The engine knows nothing about kinematics formulas. It just steps time forward
@@ -94,6 +104,7 @@ Plain static site, no build step.
 | `js/labs/*.js` | One file per lab: `line`, `projectile`, `relative` (kinematics); `forces`, `incline`, `pulleys` (laws of motion) |
 | `js/catalog.js` | Catalog page and the header Topics menu, built from the syllabus and the registered labs |
 | `js/maps.js` | Concept map: nodes, cause → effect edges, layered layout, per-lab and whole-course views |
+| `js/mapedit.js` | The editable concept map at `#/map`: move, connect, collapse, add and share |
 | `js/playground.js` | Playground: parts, editor, string/friction/spring/gravity/turntable solver, presets, challenges |
 | `js/home.js` | Landing page with a throw-things-around sandbox |
 | `js/app.js` | Hash router (`#/`, `#/topics`, `#/map`, `#/playground`, `#/<chapter>/<lab>`) |

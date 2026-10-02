@@ -4,7 +4,7 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Kinetic · JEE physics you can play with</title>
-  <meta name="description" content="Interactive IIT JEE physics labs built on a real physics engine. Start with kinematics: motion in a line, projectiles and relative velocity." />
+  <meta name="description" content="Interactive IIT JEE physics labs built on a real physics engine: kinematics (motion in a line, projectiles, relative velocity) and laws of motion (friction, inclines, pulleys)." />
   <meta name="theme-color" content="#f6f4ee" media="(prefers-color-scheme: light)" />
   <meta name="theme-color" content="#111317" media="(prefers-color-scheme: dark)" />
   <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%231b1d22'/%3E%3Cpath d='M12 50 Q32 2 52 50' fill='none' stroke='%2316a34a' stroke-width='5' stroke-linecap='round' stroke-dasharray='2 8'/%3E%3Ccircle cx='52' cy='50' r='7' fill='%23ea580c'/%3E%3C/svg%3E" />
@@ -12,7 +12,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,700&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css" />
-  <link rel="stylesheet" href="css/style.css?v=3" />
+  <link rel="stylesheet" href="css/style.css?v=6" />
 </head>
 <body>
   <a class="skip" href="#app">Skip to content</a>
@@ -24,7 +24,7 @@
       </a>
       <nav class="chapters" aria-label="Chapters">
         <a href="#/kinematics/line" data-chapter="kinematics">Kinematics</a>
-        <span class="soon" title="Coming soon">Laws of motion</span>
+        <a href="#/laws/forces" data-chapter="laws">Laws of motion</a>
         <span class="soon" title="Coming soon">Work &amp; energy</span>
         <span class="soon" title="Coming soon">Rotation</span>
       </nav>
@@ -39,11 +39,14 @@
 
   <script src="https://cdn.jsdelivr.net/npm/matter-js@0.20.0/build/matter.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js"></script>
-  <script src="js/core.js?v=3"></script>
-  <script src="js/labs/line.js?v=3"></script>
-  <script src="js/labs/projectile.js?v=3"></script>
-  <script src="js/labs/relative.js?v=3"></script>
-  <script src="js/home.js?v=3"></script>
-  <script src="js/app.js?v=3"></script>
+  <script src="js/core.js?v=6"></script>
+  <script src="js/labs/line.js?v=6"></script>
+  <script src="js/labs/projectile.js?v=6"></script>
+  <script src="js/labs/relative.js?v=6"></script>
+  <script src="js/labs/forces.js?v=6"></script>
+  <script src="js/labs/incline.js?v=6"></script>
+  <script src="js/labs/pulleys.js?v=6"></script>
+  <script src="js/home.js?v=6"></script>
+  <script src="js/app.js?v=6"></script>
 </body>
 </html>

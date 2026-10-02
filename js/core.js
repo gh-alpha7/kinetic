@@ -9,7 +9,7 @@ var K = (function () {
   /* ---------- theme (canvas reads the same CSS variables as the page) ---------- */
   var theme = {};
   var THEME_KEYS = ["canvas-bg", "grid", "grid-strong", "ground", "ground-top", "body", "ink", "muted", "disp", "vel",
-    "acc", "grav", "water", "water-2", "bank", "surface", "surface-2", "line", "good", "bad"];
+    "acc", "grav", "water", "water-2", "bank", "surface", "surface-2", "line", "good", "bad", "normal", "fric", "app", "ten"];
   function readTheme() {
     var cs = getComputedStyle(document.documentElement);
     THEME_KEYS.forEach(function (k) { theme[k] = cs.getPropertyValue("--" + k).trim(); });
@@ -271,6 +271,12 @@ var K = (function () {
   };
 
   // ground strip from the origin line down to the bottom of the canvas
+  // A force arrow from (x, y) in world px. fx, fy are newtons with y up; kpn is screen px per newton.
+  Sim.prototype.force = function (ctx, x, y, fx, fy, color, text, kpn, opt) {
+    var k = this.u(kpn || 1), o = opt || {};
+    arrow(ctx, x, y, x + fx * k, y - fy * k, color, { s: this.u(1), width: o.width || 3, head: 10, label: text, lx: o.lx, ly: o.ly, dash: o.dash });
+  };
+
   Sim.prototype.drawGround = function (ctx, yPx) {
     var v = this.view();
     yPx = yPx === undefined ? this.origin.y : yPx;
@@ -493,21 +499,37 @@ var K = (function () {
 
   /* ---------- lab page scaffold ---------- */
   var labs = [];
+  // chapters in the order they appear; labs register into them
+  var CHAPTERS = [
+    { id: "kinematics", title: "Kinematics" },
+    { id: "laws", title: "Laws of motion" }
+  ];
   function registerLab(lab) { labs.push(lab); }
+  function chapterLabs(id) { return labs.filter(function (l) { return l.chapter === id; }); }
+  function chapter(id) { return CHAPTERS.filter(function (c) { return c.id === id; })[0]; }
+  function href(l) { return "#/" + l.chapter + "/" + l.id; }
 
   // Builds the common lab layout and returns handles to each region.
   function scaffold(root, lab) {
-    var i = labs.indexOf(lab), prev = labs[i - 1], next = labs[i + 1];
+    var ch = chapter(lab.chapter), list = chapterLabs(lab.chapter), i = list.indexOf(lab);
+    var prev = list[i - 1], next = list[i + 1], nextCh = null;
+    if (!next) {
+      // the last lab points on to the next chapter that has labs
+      var ci = CHAPTERS.indexOf(ch);
+      for (var k = ci + 1; k < CHAPTERS.length && !nextCh; k++) if (chapterLabs(CHAPTERS[k].id).length) nextCh = CHAPTERS[k];
+    }
+    var nextLink = next ? '<a class="next" href="' + href(next) + '"><span>next →</span><b>' + next.title + "</b></a>"
+      : nextCh ? '<a class="next" href="' + href(chapterLabs(nextCh.id)[0]) + '"><span>next chapter →</span><b>' + nextCh.title + "</b></a>" : "";
     var el = h(
       '<section class="lab">' +
-        '<nav class="lab-nav" aria-label="Kinematics labs"><h2>Kinematics</h2>' +
-          labs.map(function (l, j) {
-            return '<a href="#/' + l.chapter + "/" + l.id + '"' + (l === lab ? ' aria-current="page"' : "") + ">" +
+        '<nav class="lab-nav" aria-label="' + ch.title + ' labs"><h2>' + ch.title + "</h2>" +
+          list.map(function (l, j) {
+            return '<a href="' + href(l) + '"' + (l === lab ? ' aria-current="page"' : "") + ">" +
               "<b>" + (j + 1) + ". " + l.title + "</b><span>" + l.short + '</span><span class="prog" data-prog="' + l.id + '"></span></a>';
           }).join("") +
         "</nav>" +
         '<div class="lab-main">' +
-          '<header class="lab-head"><p class="eyebrow">Kinematics · lab ' + (i + 1) + " of " + labs.length + "</p><h1>" + lab.title + '</h1><p class="lede">' + md(lab.lede) + "</p></header>" +
+          '<header class="lab-head"><p class="eyebrow">' + ch.title + " · lab " + (i + 1) + " of " + list.length + "</p><h1>" + lab.title + '</h1><p class="lede">' + md(lab.lede) + "</p></header>" +
           '<div class="stage-row">' +
             '<div class="stage-col"><div class="stage"><canvas></canvas><div class="hud"></div><div class="stage-note"></div>' +
               '<div class="stage-bar">' +
@@ -527,8 +549,8 @@ var K = (function () {
             '<div class="panel wide"><h2>JEE check <small>one question</small></h2><div class="quiz"></div></div>' +
           "</div>" +
           '<nav class="pager">' +
-            (prev ? '<a class="prev" href="#/' + prev.chapter + "/" + prev.id + '"><span>← previous</span><b>' + prev.title + "</b></a>" : "<span></span>") +
-            (next ? '<a class="next" href="#/' + next.chapter + "/" + next.id + '"><span>next →</span><b>' + next.title + "</b></a>" : "") +
+            (prev ? '<a class="prev" href="' + href(prev) + '"><span>← previous</span><b>' + prev.title + "</b></a>" : "<span></span>") +
+            nextLink +
           "</nav>" +
         "</div>" +
       "</section>");
@@ -600,6 +622,7 @@ var K = (function () {
     STEP: STEP, DT: DT, DEG: DEG, theme: theme, h: h, fmt: fmt, alpha: alpha, clamp: clamp, md: md, tex: tex,
     slider: slider, seg: seg, check: check, Sim: Sim, Graph: Graph, arrow: arrow, label: label,
     Tries: Tries, quiz: quiz, labs: labs, registerLab: registerLab, scaffold: scaffold, refreshProgress: refreshProgress,
+    CHAPTERS: CHAPTERS, chapterLabs: chapterLabs, chapter: chapter,
     transport: transport, readout: readout, flash: flash, throttle: throttle
   };
 })();

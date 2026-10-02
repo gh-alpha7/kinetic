@@ -24,6 +24,10 @@
   --water: #cfe3f5;
   --water-2: #b7d4ef;
   --bank: #d9cfb6;
+  --normal: #0891b2;
+  --fric: #dc2626;
+  --app: #c026d3;
+  --ten: #ca8a04;
   --radius: 14px;
   --serif: "Fraunces", Georgia, serif;
   --sans: "Inter", system-ui, -apple-system, "Segoe UI", sans-serif;
@@ -51,6 +55,10 @@
     --water: #16324a;
     --water-2: #1d3e5c;
     --bank: #3a3427;
+    --normal: #22d3ee;
+    --fric: #f87171;
+    --app: #e879f9;
+    --ten: #facc15;
   }
 }
 
@@ -251,3 +259,14 @@ button, input, select { font: inherit; color: inherit; }
 .btn, .btn:hover { text-decoration: none; }
 .skip { top: -60px; }
 @media (max-width: 1080px) { .controls { position: static; } }
+
+/* ---------- forces (laws of motion) ---------- */
+.c-normal { color: var(--normal); } .c-fric { color: var(--fric); } .c-app { color: var(--app); } .c-ten { color: var(--ten); }
+.legend { display: flex; flex-wrap: wrap; gap: 6px 12px; font-size: 13px; }
+.legend span { display: inline-flex; align-items: center; gap: 6px; font-weight: 600; }
+.legend i { width: 14px; height: 4px; border-radius: 2px; background: currentColor; }
+.state-pill { display: inline-block; padding: 2px 8px; border-radius: 999px; font: 700 11px var(--mono); text-transform: uppercase; letter-spacing: .06em; }
+.state-pill.static { background: color-mix(in srgb, var(--normal) 15%, var(--surface)); color: var(--normal); }
+.state-pill.kinetic { background: color-mix(in srgb, var(--fric) 14%, var(--surface)); color: var(--fric); }
+.chapters a { background: transparent; color: var(--ink); }
+.chapters a[aria-current="page"] { background: var(--ink); color: var(--bg); }

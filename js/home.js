@@ -3,7 +3,16 @@ var Home = (function () {
   "use strict";
 
   function mount(root) {
-    var labs = K.labs;
+    var BLURB = {
+      kinematics: "Describing motion: where, how fast, and how that changes.",
+      laws: "Forces and why things move: free-body diagrams, friction, inclines and pulleys."
+    };
+    function live(ch) {
+      var list = K.chapterLabs(ch.id);
+      return '<a class="chapter-card live" href="#/' + ch.id + "/" + list[0].id + '"><span class="tag">live · ' + list.length + " labs</span><h3>" + ch.title + "</h3>" +
+        "<p>" + (BLURB[ch.id] || "") + "</p><ul>" +
+        list.map(function (l) { return "<li>" + l.title + ' <span class="muted">· ' + l.short + "</span></li>"; }).join("") + "</ul></a>";
+    }
     var el = K.h(
       '<div class="home">' +
         '<section class="hero">' +
@@ -18,10 +27,7 @@ var Home = (function () {
         "</section>" +
         '<h2 class="section-title">Chapters</h2>' +
         '<div class="chapter-grid">' +
-          '<a class="chapter-card live" href="#/kinematics/line"><span class="tag">live · 3 labs</span><h3>Kinematics</h3>' +
-            "<p>Describing motion: where, how fast, and how that changes.</p><ul>" +
-            labs.map(function (l) { return "<li>" + l.title + ' <span class="muted">· ' + l.short + "</span></li>"; }).join("") + "</ul></a>" +
-          card("Laws of motion", "Forces, free-body diagrams, friction, pulleys and blocks.") +
+          K.CHAPTERS.filter(function (c) { return K.chapterLabs(c.id).length; }).map(live).join("") +
           card("Work, energy & power", "Springs, loops, collisions, and where energy goes.") +
           card("Rotational motion", "Torque, moment of inertia, rolling without slipping.") +
           card("Gravitation", "Orbits, escape velocity, and Kepler's laws.") +

@@ -1,0 +1,19 @@
+# chapter: labs in page order (map.js loads first). Finished chapters only; used to build index.html script tags.
+work: workenergy energy collisions
+rotation: torque inertia rolling
+gravitation: orbits escape gvariation
+matter: elasticity fluids viscosity
+shm: springmass pendulum resonance
+sound: travelling standing beatsdoppler
+heat: expansion calorimetry conduction
+thermo: processes engines
+ktg: gasbox speeds
+electrostatics: coulomb fieldlines capacitors
+current: circuits bridge rc
+magnetism: lorentz biotsavart
+emi: faraday lcr
+rays: refraction lenses prism
+waveoptics: ydse diffraction
+dual: photoelectric debroglie
+atoms: bohr decay
+semi: diode logic

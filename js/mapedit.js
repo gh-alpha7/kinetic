@@ -4,7 +4,7 @@
 var MapEditor = (function () {
   "use strict";
 
-  var KEY = "kinetic:map:v1", NH = 34, GAP = 22, LAYER = 96;
+  var KEY = "kinetic:map:v1", NH = 34, GAP = 22, LAYER = 96, MAX_ROW = 1500;
   var COLORS = [["disp", "Blue"], ["vel", "Green"], ["acc", "Orange"], ["app", "Magenta"], ["grav", "Purple"],
     ["ten", "Yellow"], ["normal", "Cyan"], ["fric", "Red"], ["ink", "Ink"]];
 
@@ -44,7 +44,8 @@ var MapEditor = (function () {
       if (m.edges.some(function (x) { return x.from === e[0] && x.to === e[1]; })) return;
       m.edges.push({ id: "e" + m.next++, from: e[0], to: e[1], label: e[2] });
     });
-    if (added.length) {                             // park new ideas in a row under the map
+    if (added.length > 8) arrange(m);                // lots of new course ideas: lay the whole map out again
+    else if (added.length) {                         // a few: park them in a row under the map
       var maxY = 0, x = 0;
       Object.keys(m.nodes).forEach(function (id) { if (added.indexOf(id) === -1) maxY = Math.max(maxY, m.nodes[id].y); });
       added.forEach(function (id) { m.nodes[id].x = x; m.nodes[id].y = maxY + LAYER * 1.5; x += width(m.nodes[id].label) + GAP; });
@@ -73,9 +74,20 @@ var MapEditor = (function () {
     ids.forEach(function (id) { (rows[layer[id]] = rows[layer[id]] || []).push(id); });
     rows = rows.filter(Boolean);
     function place() {
-      rows.forEach(function (row, ri) {
-        var total = row.reduce(function (s, id) { return s + width(m.nodes[id].label) + GAP; }, -GAP), x = -total / 2;
-        row.forEach(function (id) { var n = m.nodes[id]; n.x = Math.round(x); n.y = ri * LAYER; x += width(n.label) + GAP; });
+      var y = 0;
+      rows.forEach(function (row) {
+        // a long layer wraps onto extra lines (closer together), so the whole course stays readable
+        var lines = [[]], w = 0;
+        row.forEach(function (id) {
+          var nw = width(m.nodes[id].label) + GAP;
+          if (w + nw > MAX_ROW && lines[lines.length - 1].length) { lines.push([]); w = 0; }
+          lines[lines.length - 1].push(id); w += nw;
+        });
+        lines.forEach(function (line, li) {
+          var total = line.reduce(function (s, id) { return s + width(m.nodes[id].label) + GAP; }, -GAP), x = -total / 2;
+          line.forEach(function (id) { var n = m.nodes[id]; n.x = Math.round(x); n.y = Math.round(y); x += width(n.label) + GAP; });
+          y += li < lines.length - 1 ? LAYER * 0.7 : LAYER;
+        });
       });
     }
     place();
@@ -482,7 +494,7 @@ var MapEditor = (function () {
       if (g && (e.key === "Enter" || e.key === " ")) { e.preventDefault(); select({ type: "node", id: g.dataset.id }); }
     });
     // keep the whole map in view as the canvas settles or resizes, until the student pans or zooms it
-    var ro = new ResizeObserver(function () { if (!userView && box.clientWidth) fit(); else applyView(); });
+    var ro = new ResizeObserver(function () { if (!userView && box.clientWidth) initialView(); else applyView(); });
     ro.observe(box);
 
     /* ---------- toolbar ---------- */
@@ -552,8 +564,11 @@ var MapEditor = (function () {
     }
     document.addEventListener("keydown", onKey);
 
+    // open on the selected idea at a readable zoom (the whole course is too big to read at once)
+    function initialView() { if (sel && sel.type === "node" && M.nodes[sel.id]) { view.k = 0.85; centerOn(sel.id); } else fit(); }
     render(); fit();
     if (M.nodes.n2 && !code) select({ type: "node", id: "n2" }); else panel();
+    initialView();
     if (code) flash("Opened a shared map · edits are saved as your own copy");
     if (location.hostname === "localhost") window.__map = { get M() { return M; }, select: select, render: render, addEdge: addEdge, addNode: addNode, toggle: toggle, view: view };
 

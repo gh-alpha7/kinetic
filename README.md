@@ -41,6 +41,27 @@ Every lab has:
 - **How it connects:** the lab's slice of the concept map, with neighbouring ideas from other labs faded in.
 - **Practice:** three JEE-style questions (easy, medium, hard). Hints unlock one at a time, and *Set it up in the lab* loads the question's numbers so the student predicts the answer first and then checks it in the simulation.
 
+## The rest of the syllabus
+
+Every chapter in the catalog is live: 20 chapters and 50 labs across six units. Each lab follows `docs/LAB_GUIDE.md` (simulation, live maths, readouts, self-checking experiments, the idea and a JEE trap, three practice questions, concept-map ideas) and has numeric checks in `tests/<chapter>.test.js`.
+
+| Unit | Chapters (labs) |
+| --- | --- |
+| Mechanics | Kinematics (3), Laws of motion (3), Work, energy & power (3), Rotational motion (3), Gravitation (3), Properties of matter (3) |
+| Oscillations & waves | Simple harmonic motion (3), Waves & sound (3) |
+| Heat & thermodynamics | Thermal properties (3), Thermodynamics (2), Kinetic theory (2) |
+| Electricity & magnetism | Electrostatics (3), Current electricity (3), Magnetism (2), EMI & AC (2) |
+| Optics | Ray optics (3), Wave optics (2) |
+| Modern physics | Dual nature (2), Atoms & nuclei (2), Semiconductors (2) |
+
+Run a chapter's tests with the dev server on port 5400:
+
+```
+bash tests/run.sh <name> "js/labs/<chapter>/map.js,js/labs/<chapter>/<lab>.js,..." tests/<chapter>.test.js
+```
+
+It prints `RESULT {pass, fail, errors, results}`. `tests/chapters.txt` lists each chapter's labs in page order, and `bash tests/wire.sh` rewrites the chapter script tags in `index.html` from it (committed chapters only).
+
 ## Playground
 
 `#/playground` is a sandbox where students build their own systems from parts: blocks, balls, surfaces they draw (floors, walls, table tops, ramps), fixed and movable pulleys, strings over any number of wheels, springs, fixed points and turntables. It has three views: **side** (gravity down), **table top** (looking down, so friction acts on everything; this is where turntables live) and **space** (no floor, bodies attract with a scaled-up G). Select any body to see its live free-body diagram and readouts (tension, normal force, static or kinetic friction, spring force, the centripetal force a turntable needs). Graphs show its speed and the system's kinetic, potential and total energy. There are ready-made setups (table + hanging mass, two-pulley Atwood, movable pulley, ramp + pulley, loop the loop, spring, turntable, sun + planets, three-body figure eight, collisions) and challenges that ask for a prediction before revealing the physics. Builds autosave in the browser, Undo goes back, and *Copy link* encodes the whole build in the URL.
